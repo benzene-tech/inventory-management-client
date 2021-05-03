@@ -33,11 +33,9 @@
       "browser": true
     },
     "extends": [
-      "react-app",
       "airbnb",
       "prettier",
-      "plugin:react/recommended",
-      "prettier/react"
+      "plugin:react/recommended"
     ],
     "plugins": [
       "import",
