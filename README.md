@@ -1,2 +1,1 @@
-# inventory-management-client
-Client Service
+# Inventory Management Client
