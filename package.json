@@ -53,7 +53,9 @@
       "react-hooks"
     ],
     "rules": {
-      "prettier/prettier": "error"
+      "prettier/prettier":  ["error",{
+        "endOfLine": "auto"}
+      ]
     }
   },
   "prettier": {
