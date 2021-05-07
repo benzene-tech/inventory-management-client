@@ -1,11 +1,11 @@
-import { Link } from '@material-ui/core';
 import React from 'react';
+import AppBar from '../components/layout/app-bar';
+import SideNav from '../components/layout/side-nav/side-nav';
 
 const Index = () => (
   <div>
-    <Link variant="body1" href="/about">
-      About
-    </Link>
+    <AppBar />
+    <SideNav />
   </div>
 );
 

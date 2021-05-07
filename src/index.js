@@ -1,3 +1,4 @@
+import { CssBaseline } from '@material-ui/core';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -11,12 +12,11 @@ const store = createStore(rootReducer, applyMiddleware(thunk));
 
 ReactDOM.render(
   // eslint-disable-next-line react/jsx-filename-extension
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <Routes />
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <CssBaseline />
+    <BrowserRouter>
+      <Routes />
+    </BrowserRouter>
+  </Provider>,
   document.getElementById('root')
 );
