@@ -1,11 +1,12 @@
+import { Typography } from '@material-ui/core';
 import React from 'react';
-import AppBar from '../components/layout/app-bar';
-import SideNav from '../components/layout/side-nav/side-nav';
+import Layout from '../components/layout/layout';
 
 const Index = () => (
   <div>
-    <AppBar />
-    <SideNav />
+    <Layout>
+      <Typography variant="h4">Welcome to Inventory Management</Typography>
+    </Layout>
   </div>
 );
 

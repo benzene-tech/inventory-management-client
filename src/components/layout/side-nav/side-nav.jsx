@@ -1,5 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { Drawer, Hidden, makeStyles, Toolbar } from '@material-ui/core';
+import {
+  Divider,
+  Drawer,
+  Hidden,
+  ListItem,
+  ListItemText,
+  makeStyles,
+  Toolbar,
+} from '@material-ui/core';
 import clsx from 'clsx';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,7 +54,10 @@ const SideNav = () => {
           open={isDrawerOpen}
           onBackdropClick={() => dispatch(toggleDrawer())}
         >
-          <Toolbar />
+          <ListItem>
+            <ListItemText primary="Hi, Vishnu Vardhan" />
+          </ListItem>
+          <Divider />
           <SideNavItems />
         </Drawer>
       </Hidden>
