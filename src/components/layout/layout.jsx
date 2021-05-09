@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import React from 'react';
-import AppBar from './app-bar';
+import AppBar from './app-bar/app-bar';
 import Footer from './footer';
 import SideNav from './side-nav/side-nav';
 
@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
   },
   toolbarStyle: {
-    // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
   contentStyle: {
@@ -18,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   footerStyle: {
-    marginTop: `${theme.spacing(10)}px`,
+    marginTop: theme.spacing(10),
     bottom: 0,
   },
 }));
