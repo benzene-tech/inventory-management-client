@@ -1,2 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
 export const TOGGLE_DRAWER = 'TOGGLE_DRAWER';
+export const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS';
+export const SIGN_IN_FAILURE = 'SIGN_IN_FAILURE';

@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
 const Footer = () => {
   const classes = useStyles();
   return (
-    <div>
+    <footer>
       <Divider />
       <Box display="flex" justifyContent="center" alignItems="center">
         <Typography className={classes.textStyle} variant="body1">
@@ -22,7 +22,7 @@ const Footer = () => {
           </Link>
         </Typography>
       </Box>
-    </div>
+    </footer>
   );
 };
 
