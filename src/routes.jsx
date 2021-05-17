@@ -8,6 +8,7 @@ import Fallback from './pages/fallback';
 import SignIn from './pages/sign-in';
 
 const Routes = () => {
+  // eslint-disable-next-line no-unused-vars
   const currentUser = useSelector((state) => state.auth.currentUser);
 
   return (
@@ -16,7 +17,7 @@ const Routes = () => {
         <Switch>
           <Route exact path="/about" component={About} />
           <Route exact path="/sign-in" component={SignIn} />
-          <PrivateRoute path="/" component={Index} auth={!!currentUser} />
+          <PrivateRoute exact path="/" component={Index} auth={!!currentUser} />
           <Route component={Fallback} />
         </Switch>
       </BrowserRouter>

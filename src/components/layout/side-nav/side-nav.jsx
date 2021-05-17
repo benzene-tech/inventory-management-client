@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import {
   Divider,
   Drawer,
@@ -44,7 +43,7 @@ const SideNav = () => {
 
   const dispatch = useDispatch();
 
-  const isDrawerOpen = useSelector((state) => state.general.isDrawerOpen);
+  const { isDrawerOpen } = useSelector((state) => state.general);
 
   return (
     <div>

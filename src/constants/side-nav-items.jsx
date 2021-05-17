@@ -1,4 +1,10 @@
-import { BarChart, Group, Store, SwapHoriz } from '@material-ui/icons';
+import {
+  BarChart,
+  Category,
+  Group,
+  Store,
+  SwapHoriz,
+} from '@material-ui/icons';
 import React from 'react';
 
 const sideNavItems = [
@@ -8,7 +14,11 @@ const sideNavItems = [
   },
   {
     icon: <Store />,
-    text: 'Inventory',
+    text: 'Products',
+  },
+  {
+    icon: <Category />,
+    text: 'Category',
   },
   {
     icon: <SwapHoriz />,

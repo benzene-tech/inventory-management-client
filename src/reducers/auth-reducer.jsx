@@ -12,7 +12,7 @@ const initState = {
   signingIn: false,
 };
 
-const authReducer = (state = initState, action) => {
+const categoryReducer = (state = initState, action) => {
   switch (action.type) {
     case SIGNING_IN:
       return {
@@ -50,4 +50,4 @@ const authReducer = (state = initState, action) => {
   }
 };
 
-export default authReducer;
+export default categoryReducer;
