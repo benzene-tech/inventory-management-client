@@ -1,16 +1,55 @@
 import axios from 'axios';
-import { SIGN_IN_SUCCESS, SIGN_IN_FAILURE } from '../constants/actions';
+import Cookies from 'js-cookie';
+import {
+  SIGNING_IN,
+  SIGN_IN_SUCCESS,
+  SIGN_IN_FAILURE,
+  SIGN_OUT,
+  SET_CURRENT_USER,
+} from '../constants/actions';
 
-// eslint-disable-next-line import/prefer-default-export
 export const signIn = (credentials) => async (dispatch) => {
-  // dispatch({ type: TOGGLE_DRAWER });
-  const res = await axios.post(credentials);
+  dispatch({ type: SIGNING_IN });
+  try {
+    const res = await axios.post('/api/auth/sign-in', credentials);
 
-  const { user, errors } = res.data;
+    const { user } = res.data;
 
-  if (!errors) {
-    dispatch({ type: SIGN_IN_FAILURE, payload: errors });
-  } else {
     dispatch({ type: SIGN_IN_SUCCESS, payload: user });
+  } catch (err) {
+    const { errors } = err.response.data;
+
+    dispatch({ type: SIGN_IN_FAILURE, payload: errors });
   }
+};
+
+export const getCurrentUser = () => async (dispatch) => {
+  try {
+    const jwt = Cookies.get('jwt');
+    const res = await axios.get('/api/auth/current-user', {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+
+    const { user } = await res.data;
+
+    dispatch({ type: SET_CURRENT_USER, payload: user });
+    // eslint-disable-next-line no-empty
+  } catch (err) {}
+};
+
+export const signOut = () => async (dispatch) => {
+  try {
+    const jwt = Cookies.get('jwt');
+
+    await axios.post('/api/auth/sign-out', null, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+
+    dispatch({ type: SIGN_OUT });
+    // eslint-disable-next-line no-empty
+  } catch (err) {}
 };

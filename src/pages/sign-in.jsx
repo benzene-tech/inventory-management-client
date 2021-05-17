@@ -1,7 +1,9 @@
 import {
+  Box,
   Button,
   Grid,
   IconButton,
+  LinearProgress,
   Link,
   makeStyles,
   TextField,
@@ -9,10 +11,20 @@ import {
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { signIn } from '../actions/auth-actions';
 import Footer from '../components/layout/footer';
 
 const useStyles = makeStyles((theme) => ({
-  rootStyle: {},
+  formStyle: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignContent: 'center',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginTop: '30vh',
+  },
   textfieldStyle: {
     width: '100%',
     marginBottom: theme.spacing(2),
@@ -27,31 +39,41 @@ const useStyles = makeStyles((theme) => ({
   footerStyle: {
     position: 'fixed',
     bottom: 0,
-    width: '100%',
+    width: '90%',
+    marginLeft: '5%',
     marginBottom: theme.spacing(1.5),
   },
 }));
 
 const SignIn = () => {
+  const dispatch = useDispatch();
+
+  const { currentUser, signingIn } = useSelector((state) => state.auth);
+
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
     },
     onSubmit: (values) => {
-      // eslint-disable-next-line no-console
-      console.log(values);
+      dispatch(signIn(values));
     },
   });
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const classes = useStyles();
+
+  if (currentUser) {
+    return <Redirect to="/" />;
+  }
+
   return (
     <div>
+      {signingIn === true ? <LinearProgress /> : null}
       <Grid container direction="column">
-        <form onSubmit={formik.handleSubmit}>
-          <Grid container item xs={12} md={3}>
+        <form onSubmit={formik.handleSubmit} className={classes.formStyle}>
+          <Grid container item xs={11} sm={6} md={4}>
             <TextField
               id="username"
               label="Username*"
@@ -61,7 +83,7 @@ const SignIn = () => {
               className={classes.textfieldStyle}
             />
           </Grid>
-          <Grid container item xs={12} md={3}>
+          <Grid container item xs={11} sm={6} md={4}>
             <TextField
               id="password"
               label="Password*"
@@ -85,12 +107,12 @@ const SignIn = () => {
               className={classes.textfieldStyle}
             />
           </Grid>
-          <Grid item xs={12} md={3} className={classes.linkStyle}>
+          <Grid item xs={11} sm={6} md={4} className={classes.linkStyle}>
             <Link href="/forgot-password" variant="body2">
               Forgot Password?
             </Link>
           </Grid>
-          <Grid container item xs={12} md={3}>
+          <Grid container item xs={11} sm={6} md={4}>
             <Button
               variant="contained"
               size="large"
@@ -103,10 +125,10 @@ const SignIn = () => {
             </Button>
           </Grid>
         </form>
-        <Grid className={classes.footerStyle}>
-          <Footer />
-        </Grid>
       </Grid>
+      <Box className={classes.footerStyle}>
+        <Footer />
+      </Box>
     </div>
   );
 };
