@@ -7,7 +7,9 @@ import {
   IconButton,
   TextField,
   Typography,
+  Snackbar,
 } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
@@ -16,7 +18,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Add } from '@material-ui/icons';
-import { addCategory } from '../../actions/category-actions';
+import { addCategory, closeSnackbar } from '../../actions/category-actions';
 
 const styles = (theme) => ({
   root: {
@@ -30,6 +32,11 @@ const styles = (theme) => ({
     color: theme.palette.grey[500],
   },
 });
+
+function Alert(props) {
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const DialogTitle = withStyles(styles)((props) => {
   const { children, classes, onClose, ...other } = props;
@@ -64,7 +71,9 @@ const AddCategory = ({ onClose }) => {
   const [name, setName] = useState('');
   const [newFeature, setNewFeature] = useState('');
 
-  const { addingCategory } = useSelector((state) => state.category);
+  const { addingCategory, successSnackbar, failureSnackbar } = useSelector(
+    (state) => state.category
+  );
   const dispatch = useDispatch();
 
   return (
@@ -128,6 +137,30 @@ const AddCategory = ({ onClose }) => {
           Save
         </Button>
       </DialogActions>
+      <Snackbar
+        open={successSnackbar}
+        autoHideDuration={6000}
+        onClose={() => dispatch(closeSnackbar('SUCCESS'))}
+      >
+        <Alert
+          onClose={() => dispatch(closeSnackbar('SUCCESS'))}
+          severity="success"
+        >
+          Category Added Successfully
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={failureSnackbar}
+        autoHideDuration={6000}
+        onClose={() => dispatch(closeSnackbar('FAILURE'))}
+      >
+        <Alert
+          onClose={() => dispatch(closeSnackbar('FAILURE'))}
+          severity="error"
+        >
+          Error Adding Category
+        </Alert>
+      </Snackbar>
     </>
   );
 };
