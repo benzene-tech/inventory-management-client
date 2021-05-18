@@ -7,6 +7,7 @@ import {
   IconButton,
   TextField,
   Typography,
+  makeStyles,
 } from '@material-ui/core';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
@@ -30,6 +31,29 @@ const styles = (theme) => ({
     color: theme.palette.grey[500],
   },
 });
+
+const useStyles = makeStyles((theme) => ({
+  textfieldStyle: {
+    width: '100%',
+    marginBottom: theme.spacing(2),
+  },
+  listStyle: {
+    listStyle: 'none',
+    [theme.breakpoints.down('xs')]: {
+      width: theme.spacing(35),
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing(40),
+    },
+    [theme.breakpoints.up('md')]: {
+      width: theme.spacing(50),
+    },
+  },
+  chipStyle: {
+    margin: '5px',
+    maxWidth: '120px',
+  },
+}));
 
 const DialogTitle = withStyles(styles)((props) => {
   const { children, classes, onClose, ...other } = props;
@@ -66,6 +90,7 @@ const AddCategory = ({ onClose }) => {
 
   const { addingCategory } = useSelector((state) => state.category);
   const dispatch = useDispatch();
+  const classes = useStyles();
 
   return (
     <>
@@ -75,6 +100,7 @@ const AddCategory = ({ onClose }) => {
         <Grid container direction="column">
           <TextField
             variant="outlined"
+            className={classes.textfieldStyle}
             label="Name*"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -83,11 +109,15 @@ const AddCategory = ({ onClose }) => {
             variant="outlined"
             label="Features*"
             value={newFeature}
+            className={classes.textfieldStyle}
             onChange={(e) => setNewFeature(e.target.value)}
             InputProps={{
               endAdornment: (
                 <IconButton
                   onClick={() => {
+                    if (newFeature === '') {
+                      return;
+                    }
                     setFeatures([
                       ...features,
                       {
@@ -103,18 +133,28 @@ const AddCategory = ({ onClose }) => {
               ),
             }}
           />
-          {features.map((_feature) => (
-            <Chip
-              key={_feature.key}
-              label={_feature.value}
-              onDelete={() => {
-                setFeatures(() =>
-                  features.filter((feature) => _feature.key !== feature.key)
-                );
-              }}
-              color="primary"
-            />
-          ))}
+          <li
+            key={features.key}
+            className={classes.listStyle}
+            xs={11}
+            sm={6}
+            md={4}
+          >
+            {features.map((_feature) => (
+              <Chip
+                variant="outlined"
+                key={_feature.key}
+                className={classes.chipStyle}
+                label={_feature.value}
+                onDelete={() => {
+                  setFeatures(() =>
+                    features.filter((feature) => _feature.key !== feature.key)
+                  );
+                }}
+                color="primary"
+              />
+            ))}
+          </li>
         </Grid>
       </DialogContent>
       <DialogActions>
