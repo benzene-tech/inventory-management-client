@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import {
   SIGNING_IN,
   SIGN_IN_SUCCESS,
@@ -10,6 +11,7 @@ const initState = {
   currentUser: null,
   authToken: null,
   signingIn: false,
+  jwt: Cookies.get('jwt'),
 };
 
 const categoryReducer = (state = initState, action) => {

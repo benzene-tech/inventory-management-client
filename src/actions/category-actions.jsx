@@ -18,9 +18,6 @@ export const addCategory =
         name: feature.value,
       }));
 
-      // eslint-disable-next-line no-console
-      console.log(attributes);
-
       const jwt = Cookies.get('jwt');
       const res = await axios.post(
         '/api/products/category',

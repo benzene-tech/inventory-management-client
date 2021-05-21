@@ -87,6 +87,7 @@ const DialogActions = withStyles((theme) => ({
   root: {
     margin: 0,
     padding: theme.spacing(1),
+    justifyContent: 'center',
   },
 }))(MuiDialogActions);
 
@@ -171,6 +172,7 @@ const AddCategory = ({ onClose }) => {
           autoFocus
           onClick={() => {
             dispatch(addCategory({ name, features }));
+            onClose();
           }}
           color="primary"
         >
