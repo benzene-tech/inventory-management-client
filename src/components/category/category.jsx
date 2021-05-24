@@ -9,15 +9,18 @@ import {
   Chip,
   Card,
   GridList,
+  Snackbar,
   Grid,
 } from '@material-ui/core';
-import { Add, FullscreenExit } from '@material-ui/icons';
+import { Add } from '@material-ui/icons';
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import CardHeader from '@material-ui/core/CardHeader';
+import MuiAlert from '@material-ui/lab/Alert';
 import AddCategory from './add-category';
 import ViewCategory from './view-category';
+import { closeSnackbar } from '../../actions/category-actions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cardStyle: {
     width: '220px',
-    height: '114px',
+    height: '90px',
     padding: theme.spacing(1.35),
     margin: theme.spacing(0.75),
   },
@@ -62,6 +65,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function Alert(props) {
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 const Category = () => {
   const classes = useStyles();
 
@@ -69,8 +76,13 @@ const Category = () => {
   const [isViewCategoryOpen, setViewCategoryOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState({});
   const [categoryData, setCategoryData] = useState([]);
+  const dispatch = useDispatch();
 
   const { jwt } = useSelector((state) => state.auth);
+
+  const { successSnackbar, failureSnackbar } = useSelector(
+    (state) => state.category
+  );
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -82,7 +94,7 @@ const Category = () => {
       setCategoryData(res.data);
     };
     fetchCategories();
-  }, [isModalOpen]);
+  }, [isModalOpen, isViewCategoryOpen]);
 
   return (
     <div className={classes.root}>
@@ -101,7 +113,6 @@ const Category = () => {
                 <CardHeader
                   className={classes.cardHeaderStyle}
                   title={category.name}
-                  subheader="Attributes :"
                 />
                 <li key={category.attributes} className={classes.listStyle}>
                   {category.attributes.map((_feature) => (
@@ -139,6 +150,30 @@ const Category = () => {
           category={() => selectedCategory}
         />
       </Dialog>
+      <Snackbar
+        open={successSnackbar}
+        autoHideDuration={6000}
+        onClose={() => dispatch(closeSnackbar('SUCCESS'))}
+      >
+        <Alert
+          onClose={() => dispatch(closeSnackbar('SUCCESS'))}
+          severity="success"
+        >
+          Success
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={failureSnackbar}
+        autoHideDuration={6000}
+        onClose={() => dispatch(closeSnackbar('FAILURE'))}
+      >
+        <Alert
+          onClose={() => dispatch(closeSnackbar('FAILURE'))}
+          severity="error"
+        >
+          Error
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
