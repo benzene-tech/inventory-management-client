@@ -93,13 +93,13 @@ const ViewCategory = ({ category, onClose }) => {
   const [newFeature, setNewFeature] = useState('');
   const [features, setFeatures] = useState(attributes);
   const [isEditing, setIsEditing] = useState(false);
-  const { updatingCategory } = useSelector((state) => state.category);
+  const { loadingCategory } = useSelector((state) => state.category);
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
   return (
     <>
-      {updatingCategory === true ? <LinearProgress /> : null}
+      {loadingCategory === true ? <LinearProgress /> : null}
       <DialogTitle onClose={() => onClose()}>Category</DialogTitle>
       <DialogContent dividers>
         <Grid container direction="column">
@@ -237,6 +237,7 @@ const ViewCategory = ({ category, onClose }) => {
             autoFocus
             onClick={() => {
               dispatch(updateCategory({ name, features }));
+              setIsEditing(false);
             }}
             color="primary"
           >

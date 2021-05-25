@@ -72,7 +72,7 @@ function Alert(props) {
 const Category = () => {
   const classes = useStyles();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
   const [isViewCategoryOpen, setViewCategoryOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState({});
   const [categoryData, setCategoryData] = useState([]);
@@ -80,7 +80,7 @@ const Category = () => {
 
   const { jwt } = useSelector((state) => state.auth);
 
-  const { successSnackbar, failureSnackbar } = useSelector(
+  const { errors, message, successSnackbar, failureSnackbar } = useSelector(
     (state) => state.category
   );
 
@@ -94,13 +94,14 @@ const Category = () => {
       setCategoryData(res.data);
     };
     fetchCategories();
-  }, [isModalOpen, isViewCategoryOpen]);
+  }, [successSnackbar]);
 
   return (
     <div className={classes.root}>
       <div className={classes.categoryStyle}>
         <GridList cellHeight={300} cols={1} className={classes.gridListStyle}>
           <Grid container className={classes.gridStyle}>
+            {categoryData.length ? null : <h1>Please add a Category</h1>}
             {categoryData.map((category) => (
               <Card
                 className={classes.cardStyle}
@@ -133,13 +134,16 @@ const Category = () => {
       <Fab
         color="primary"
         variant="extended"
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => setIsAddCategoryOpen(true)}
       >
         <Add className={classes.extendedIcon} />
         CATEGORY
       </Fab>
-      <Dialog open={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <AddCategory onClose={() => setIsModalOpen(false)} />
+      <Dialog
+        open={isAddCategoryOpen}
+        onClose={() => setIsAddCategoryOpen(false)}
+      >
+        <AddCategory onClose={() => setIsAddCategoryOpen(false)} />
       </Dialog>
       <Dialog
         open={isViewCategoryOpen}
@@ -159,7 +163,7 @@ const Category = () => {
           onClose={() => dispatch(closeSnackbar('SUCCESS'))}
           severity="success"
         >
-          Success
+          {message}
         </Alert>
       </Snackbar>
       <Snackbar
@@ -171,7 +175,7 @@ const Category = () => {
           onClose={() => dispatch(closeSnackbar('FAILURE'))}
           severity="error"
         >
-          Error
+          {errors[0].message}
         </Alert>
       </Snackbar>
     </div>

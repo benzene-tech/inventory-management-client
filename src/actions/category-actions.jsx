@@ -34,9 +34,9 @@ export const addCategory =
         }
       );
 
-      const { category } = await res.data;
+      const { message } = await res.data;
 
-      dispatch({ type: CATEGORY_SUCCESS, payload: category });
+      dispatch({ type: CATEGORY_SUCCESS, payload: message });
     } catch (err) {
       const { errors } = err.response.data;
 

@@ -89,13 +89,13 @@ const AddCategory = ({ onClose }) => {
   const [name, setName] = useState('');
   const [newFeature, setNewFeature] = useState('');
 
-  const { addingCategory } = useSelector((state) => state.category);
+  const { loadingCategory } = useSelector((state) => state.category);
   const dispatch = useDispatch();
   const classes = useStyles();
 
   return (
     <>
-      {addingCategory === true ? <LinearProgress /> : null}
+      {loadingCategory === true ? <LinearProgress /> : null}
       <DialogTitle onClose={() => onClose()}>Add Category</DialogTitle>
       <DialogContent dividers>
         <Grid container direction="column">

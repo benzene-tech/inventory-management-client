@@ -11,8 +11,8 @@ import {
 const initState = {
   categories: {},
   message: '',
-  addingCategory: false,
-  updatingCategory: false,
+  errors: [],
+  loadingCategory: false,
   successSnackbar: false,
   failureSnackbar: false,
 };
@@ -22,28 +22,30 @@ const generalReducer = (state = initState, action) => {
     case ADDING_CATEGORY:
       return {
         ...state,
-        addingCategory: true,
+        loadingCategory: true,
       };
     case UPDATE_CATEGORY:
       return {
         ...state,
-        updatingCategory: true,
+        loadingCategory: true,
       };
     case DELETE_CATEGORY:
       return {
         ...state,
+        loadingCategory: true,
       };
     case CATEGORY_SUCCESS:
       return {
         ...state,
         message: action.payload,
-        addingCategory: false,
+        loadingCategory: false,
         successSnackbar: true,
       };
     case CATEGORY_FAILURE:
       return {
         ...state,
-        addingCategory: false,
+        errors: action.payload,
+        loadingCategory: false,
         failureSnackbar: true,
       };
     case CLOSE_SUCCESS_SNACKBAR:
