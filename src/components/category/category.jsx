@@ -1,11 +1,7 @@
-/* eslint-disable no-unused-vars */
 import {
-  CardContent,
   Dialog,
   Fab,
   makeStyles,
-  Paper,
-  Typography,
   Chip,
   Card,
   GridList,
@@ -54,6 +50,10 @@ const useStyles = makeStyles((theme) => ({
   },
   gridListStyle: {
     width: '100%',
+  },
+  buttonStyle: {
+    display: 'flex',
+    justifyContent: 'space-around',
   },
   gridStyle: {
     width: 'auto',
@@ -131,14 +131,16 @@ const Category = () => {
           </Grid>
         </GridList>
       </div>
-      <Fab
-        color="primary"
-        variant="extended"
-        onClick={() => setIsAddCategoryOpen(true)}
-      >
-        <Add className={classes.extendedIcon} />
-        CATEGORY
-      </Fab>
+      <div className={classes.buttonStyle}>
+        <Fab
+          color="primary"
+          variant="extended"
+          onClick={() => setIsAddCategoryOpen(true)}
+        >
+          <Add className={classes.extendedIcon} />
+          CATEGORY
+        </Fab>
+      </div>
       <Dialog
         open={isAddCategoryOpen}
         onClose={() => setIsAddCategoryOpen(false)}

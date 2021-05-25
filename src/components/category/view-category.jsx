@@ -92,6 +92,7 @@ const ViewCategory = ({ category, onClose }) => {
   const { attributes } = category();
   const [newFeature, setNewFeature] = useState('');
   const [features, setFeatures] = useState(attributes);
+  const [featureError, setFeatureError] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const { loadingCategory } = useSelector((state) => state.category);
   const [open, setOpen] = useState(false);
@@ -112,18 +113,28 @@ const ViewCategory = ({ category, onClose }) => {
           />
           {isEditing === true ? (
             <TextField
+              error={featureError !== ''}
               variant="outlined"
               label="Features*"
               value={newFeature}
               className={classes.textfieldStyle}
+              helperText={featureError}
               onChange={(e) => setNewFeature(e.target.value)}
               InputProps={{
                 endAdornment: (
                   <IconButton
                     onClick={() => {
-                      if (newFeature === '') {
+                      if (
+                        features.find((feature) => feature.name === newFeature)
+                      ) {
+                        setFeatureError('Feature already exists');
                         return;
                       }
+                      if (newFeature === '') {
+                        setFeatureError('Enter a feature');
+                        return;
+                      }
+                      setFeatureError('');
                       setFeatures([
                         ...features,
                         {
@@ -192,7 +203,7 @@ const ViewCategory = ({ category, onClose }) => {
           <div>
             <Button
               autoFocus
-              color="primary"
+              color="secondary"
               onClick={() => {
                 setOpen(true);
               }}
@@ -213,8 +224,7 @@ const ViewCategory = ({ category, onClose }) => {
                     dispatch(deleteCategory({ name }));
                     onClose();
                   }}
-                  variant="outlined"
-                  color="primary"
+                  color="secondary"
                 >
                   Delete
                 </Button>
@@ -222,7 +232,6 @@ const ViewCategory = ({ category, onClose }) => {
                   onClick={() => {
                     setOpen(false);
                   }}
-                  variant="outlined"
                   color="primary"
                   autoFocus
                 >

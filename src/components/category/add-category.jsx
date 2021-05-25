@@ -88,11 +88,12 @@ const AddCategory = ({ onClose }) => {
   const [features, setFeatures] = useState([]);
   const [name, setName] = useState('');
   const [newFeature, setNewFeature] = useState('');
+  const [nameError, setNameError] = useState('');
+  const [featureError, setFeatureError] = useState('');
 
   const { loadingCategory } = useSelector((state) => state.category);
   const dispatch = useDispatch();
   const classes = useStyles();
-
   return (
     <>
       {loadingCategory === true ? <LinearProgress /> : null}
@@ -100,25 +101,39 @@ const AddCategory = ({ onClose }) => {
       <DialogContent dividers>
         <Grid container direction="column">
           <TextField
+            error={nameError !== ''}
             variant="outlined"
             className={classes.textfieldStyle}
             label="Name*"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+            helperText={nameError}
           />
           <TextField
+            error={featureError !== ''}
             variant="outlined"
             label="Features*"
             value={newFeature}
             className={classes.textfieldStyle}
+            helperText={featureError}
             onChange={(e) => setNewFeature(e.target.value)}
             InputProps={{
               endAdornment: (
                 <IconButton
                   onClick={() => {
-                    if (newFeature === '') {
+                    if (
+                      features.find((feature) => feature.value === newFeature)
+                    ) {
+                      setFeatureError('Feature already exists');
                       return;
                     }
+                    if (newFeature === '') {
+                      setFeatureError('Enter a feature');
+                      return;
+                    }
+                    setFeatureError('');
                     setFeatures([
                       ...features,
                       {
@@ -162,10 +177,15 @@ const AddCategory = ({ onClose }) => {
         <Button
           autoFocus
           onClick={() => {
-            dispatch(addCategory({ name, features }));
-            setName('');
-            setFeatures([]);
-            setNewFeature('');
+            if (name === '') {
+              setNameError('Enter the name');
+            } else {
+              setNameError('');
+              dispatch(addCategory({ name, features }));
+              setName('');
+              setFeatures([]);
+              setNewFeature('');
+            }
           }}
           color="primary"
         >

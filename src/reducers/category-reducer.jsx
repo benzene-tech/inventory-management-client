@@ -11,7 +11,7 @@ import {
 const initState = {
   categories: {},
   message: '',
-  errors: [],
+  errors: [{ message: '' }],
   loadingCategory: false,
   successSnackbar: false,
   failureSnackbar: false,
