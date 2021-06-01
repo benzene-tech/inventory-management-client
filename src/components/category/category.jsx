@@ -17,6 +17,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import AddCategory from './add-category';
 import ViewCategory from './view-category';
 import { closeSnackbar } from '../../actions/category-actions';
+import addCategoryImage from '../../static/addCategory.svg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,6 +56,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-around',
   },
+  imgStyle: {
+    maxHeight: '100%',
+    maxWidth: '100%',
+  },
   gridStyle: {
     width: 'auto',
     height: 'auto',
@@ -78,7 +83,7 @@ const Category = () => {
   const [categoryData, setCategoryData] = useState([]);
   const dispatch = useDispatch();
 
-  const { jwt } = useSelector((state) => state.auth);
+  const { jwt, storeId } = useSelector((state) => state.auth);
 
   const { errors, message, successSnackbar, failureSnackbar } = useSelector(
     (state) => state.category
@@ -86,7 +91,7 @@ const Category = () => {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const res = await axios.get('/api/products/category', {
+      const res = await axios.get(`/api/products/category/${storeId}`, {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
@@ -99,9 +104,16 @@ const Category = () => {
   return (
     <div className={classes.root}>
       <div className={classes.categoryStyle}>
+        <h3>Categories</h3>
         <GridList cellHeight={300} cols={1} className={classes.gridListStyle}>
           <Grid container className={classes.gridStyle}>
-            {categoryData.length ? null : <h1>Please add a Category</h1>}
+            {categoryData.length ? null : (
+              <img
+                className={classes.imgStyle}
+                src={addCategoryImage}
+                alt="Empty Category"
+              />
+            )}
             {categoryData.map((category) => (
               <Card
                 className={classes.cardStyle}

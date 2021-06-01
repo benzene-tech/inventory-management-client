@@ -12,7 +12,7 @@ import {
 
 // eslint-disable-next-line import/prefer-default-export
 export const addCategory =
-  ({ name, features }) =>
+  ({ name, features, storeId }) =>
   async (dispatch) => {
     dispatch({ type: ADDING_CATEGORY });
     try {
@@ -26,6 +26,7 @@ export const addCategory =
         {
           name,
           attributes,
+          storeId,
         },
         {
           headers: {
@@ -45,7 +46,7 @@ export const addCategory =
   };
 
 export const updateCategory =
-  ({ name, features }) =>
+  ({ name, features, storeId }) =>
   async (dispatch) => {
     dispatch({ type: UPDATE_CATEGORY });
     try {
@@ -56,8 +57,8 @@ export const updateCategory =
       const res = await axios.put(
         `/api/products/category/${name}`,
         {
-          name,
           attributes,
+          storeId,
         },
         {
           headers: {
@@ -77,7 +78,7 @@ export const updateCategory =
   };
 
 export const deleteCategory =
-  ({ name }) =>
+  ({ name, storeId }) =>
   async (dispatch) => {
     dispatch({ type: DELETE_CATEGORY });
     try {
@@ -85,6 +86,9 @@ export const deleteCategory =
       const res = await axios.delete(`/api/products/category/${name}`, {
         headers: {
           Authorization: `Bearer ${jwt}`,
+        },
+        data: {
+          storeId,
         },
       });
 

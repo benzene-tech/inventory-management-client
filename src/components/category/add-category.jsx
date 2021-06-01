@@ -90,7 +90,7 @@ const AddCategory = ({ onClose }) => {
   const [newFeature, setNewFeature] = useState('');
   const [nameError, setNameError] = useState('');
   const [featureError, setFeatureError] = useState('');
-
+  const { storeId } = useSelector((state) => state.auth);
   const { loadingCategory } = useSelector((state) => state.category);
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -181,7 +181,7 @@ const AddCategory = ({ onClose }) => {
               setNameError('Enter the name');
             } else {
               setNameError('');
-              dispatch(addCategory({ name, features }));
+              dispatch(addCategory({ name, features, storeId }));
               setName('');
               setFeatures([]);
               setNewFeature('');

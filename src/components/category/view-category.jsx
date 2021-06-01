@@ -95,6 +95,7 @@ const ViewCategory = ({ category, onClose }) => {
   const [featureError, setFeatureError] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const { loadingCategory } = useSelector((state) => state.category);
+  const { storeId } = useSelector((state) => state.auth);
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
@@ -105,6 +106,7 @@ const ViewCategory = ({ category, onClose }) => {
       <DialogContent dividers>
         <Grid container direction="column">
           <TextField
+            color="primary"
             disabled
             variant="outlined"
             className={classes.textfieldStyle}
@@ -221,7 +223,7 @@ const ViewCategory = ({ category, onClose }) => {
               <DialogActions>
                 <Button
                   onClick={() => {
-                    dispatch(deleteCategory({ name }));
+                    dispatch(deleteCategory({ name, storeId }));
                     onClose();
                   }}
                   color="secondary"
@@ -245,7 +247,7 @@ const ViewCategory = ({ category, onClose }) => {
           <Button
             autoFocus
             onClick={() => {
-              dispatch(updateCategory({ name, features }));
+              dispatch(updateCategory({ name, features, storeId }));
               setIsEditing(false);
             }}
             color="primary"

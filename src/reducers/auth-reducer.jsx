@@ -9,6 +9,7 @@ import {
 
 const initState = {
   currentUser: null,
+  storeId: null,
   authToken: null,
   signingIn: false,
   jwt: Cookies.get('jwt'),
@@ -25,6 +26,7 @@ const categoryReducer = (state = initState, action) => {
       return {
         ...state,
         currentUser: action.payload.username,
+        storeId: action.payload.storeId,
         errors: null,
         signingIn: false,
       };
@@ -45,6 +47,7 @@ const categoryReducer = (state = initState, action) => {
       return {
         ...state,
         currentUser: null,
+        storeId: null,
         errors: null,
       };
     default:
