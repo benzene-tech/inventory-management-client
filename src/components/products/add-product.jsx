@@ -19,10 +19,11 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import CloseIcon from '@material-ui/icons/Close';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
+import { addProduct } from '../../actions/product-actions';
 
 const styles = (theme) => ({
   root: {
@@ -42,21 +43,15 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     marginBottom: theme.spacing(2),
   },
-  listStyle: {
-    listStyle: 'none',
-    [theme.breakpoints.down('xs')]: {
-      width: theme.spacing(35),
-    },
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(40),
-    },
-    [theme.breakpoints.up('md')]: {
-      width: theme.spacing(50),
-    },
+  smallTextfieldStyle: {
+    width: '100px',
+    margin: theme.spacing(0.5),
   },
-  chipStyle: {
-    margin: '5px',
-    maxWidth: '120px',
+  stepperStyle: {
+    padding: theme.spacing(0),
+  },
+  inputGridStyle: {
+    justifyContent: 'center',
   },
 }));
 
@@ -77,7 +72,16 @@ const DialogTitle = withStyles(styles)((props) => {
 
 const DialogContent = withStyles((theme) => ({
   root: {
-    padding: theme.spacing(2),
+    maxHeight: theme.spacing(25),
+    [theme.breakpoints.down('xs')]: {
+      width: theme.spacing(35),
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing(40),
+    },
+    [theme.breakpoints.up('md')]: {
+      width: theme.spacing(50),
+    },
   },
 }))(MuiDialogContent);
 
@@ -100,6 +104,7 @@ const AddProduct = ({ onClose }) => {
   const [categoryError, setCategoryError] = useState('');
   const steps = ['Name', 'Features', 'Image'];
   const { jwt, storeId } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   const handleNext = () => {
     if (activeStep === 0) {
@@ -128,8 +133,12 @@ const AddProduct = ({ onClose }) => {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
     if (activeStep === 2) {
-      // eslint-disable-next-line no-console
-      console.log(features);
+      dispatch(addProduct({ name, category, features, storeId, imgURL }));
+      setName('');
+      setCategory('');
+      setFeatures([]);
+      setImgURL('');
+      setActiveStep(0);
     }
   };
 
@@ -153,7 +162,11 @@ const AddProduct = ({ onClose }) => {
   return (
     <>
       <DialogTitle onClose={() => onClose()}>
-        <Stepper activeStep={activeStep} alternativeLabel>
+        <Stepper
+          className={classes.stepperStyle}
+          activeStep={activeStep}
+          alternativeLabel
+        >
           {steps.map((label) => (
             <Step key={label}>
               <StepLabel>{label}</StepLabel>
@@ -194,12 +207,13 @@ const AddProduct = ({ onClose }) => {
             </FormControl>
           </Grid>
         ) : activeStep === 1 ? (
-          <Grid container direction="column">
+          <Grid container direction="row" className={classes.inputGridStyle}>
             {features.map((feature) => (
               <TextField
                 variant="outlined"
                 key={feature.name}
-                className={classes.textfieldStyle}
+                size="small"
+                className={classes.smallTextfieldStyle}
                 label={feature.name}
                 value={feature.value}
                 onChange={(e) => {

@@ -1,51 +1,51 @@
 import {
-  ADDING_CATEGORY,
-  UPDATE_CATEGORY,
-  DELETE_CATEGORY,
-  CATEGORY_FAILURE,
-  CATEGORY_SUCCESS,
+  ADDING_PRODUCT,
+  UPDATE_PRODUCT,
+  DELETE_PRODUCT,
+  PRODUCT_FAILURE,
+  PRODUCT_SUCCESS,
   CLOSE_SUCCESS_SNACKBAR,
   CLOSE_FAILURE_SNACKBAR,
 } from '../constants/actions';
 
 const initState = {
-  categories: {},
+  products: {},
   message: '',
   errors: [{ message: '' }],
-  loadingCategory: false,
+  loadingProduct: false,
   successSnackbar: false,
   failureSnackbar: false,
 };
 
-const categoryReducer = (state = initState, action) => {
+const productReducer = (state = initState, action) => {
   switch (action.type) {
-    case ADDING_CATEGORY:
+    case ADDING_PRODUCT:
       return {
         ...state,
-        loadingCategory: true,
+        loadingProduct: true,
       };
-    case UPDATE_CATEGORY:
+    case UPDATE_PRODUCT:
       return {
         ...state,
-        loadingCategory: true,
+        loadingProduct: true,
       };
-    case DELETE_CATEGORY:
+    case DELETE_PRODUCT:
       return {
         ...state,
-        loadingCategory: true,
+        loadingProduct: true,
       };
-    case CATEGORY_SUCCESS:
+    case PRODUCT_SUCCESS:
       return {
         ...state,
         message: action.payload,
-        loadingCategory: false,
+        loadingProduct: false,
         successSnackbar: true,
       };
-    case CATEGORY_FAILURE:
+    case PRODUCT_FAILURE:
       return {
         ...state,
         errors: action.payload,
-        loadingCategory: false,
+        loadingProduct: false,
         failureSnackbar: true,
       };
     case CLOSE_SUCCESS_SNACKBAR:
@@ -63,4 +63,4 @@ const categoryReducer = (state = initState, action) => {
   }
 };
 
-export default categoryReducer;
+export default productReducer;

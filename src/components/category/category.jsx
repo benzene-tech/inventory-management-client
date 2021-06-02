@@ -16,7 +16,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import MuiAlert from '@material-ui/lab/Alert';
 import AddCategory from './add-category';
 import ViewCategory from './view-category';
-import { closeSnackbar } from '../../actions/category-actions';
+import { closeSnackbar } from '../../actions/general-actions';
 import addCategoryImage from '../../static/addCategory.svg';
 
 const useStyles = makeStyles((theme) => ({
