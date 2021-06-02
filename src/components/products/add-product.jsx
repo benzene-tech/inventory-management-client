@@ -7,6 +7,7 @@ import {
   TextField,
   Typography,
   makeStyles,
+  LinearProgress,
 } from '@material-ui/core';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -105,6 +106,7 @@ const AddProduct = ({ onClose }) => {
   const steps = ['Name', 'Features', 'Image'];
   const { jwt, storeId } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const { loadingProduct } = useSelector((state) => state.product);
 
   const handleNext = () => {
     if (activeStep === 0) {
@@ -161,6 +163,7 @@ const AddProduct = ({ onClose }) => {
   const classes = useStyles();
   return (
     <>
+      {loadingProduct === true ? <LinearProgress /> : null}
       <DialogTitle onClose={() => onClose()}>
         <Stepper
           className={classes.stepperStyle}

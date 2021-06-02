@@ -15,7 +15,6 @@ export const addProduct =
     dispatch({ type: ADDING_PRODUCT });
     try {
       const attributes = features;
-      const quantity = 0;
       const jwt = Cookies.get('jwt');
       const res = await axios.post(
         '/api/products/',
@@ -23,7 +22,6 @@ export const addProduct =
           name,
           category,
           attributes,
-          quantity,
           storeId,
           imgURL,
         },
