@@ -1,19 +1,12 @@
-import {
-  makeStyles,
-  Fab,
-  GridList,
-  Grid,
-  Dialog,
-  Snackbar,
-} from '@material-ui/core';
+import { makeStyles, Fab, GridList, Grid, Dialog } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { DataGrid } from '@material-ui/data-grid';
 import { Add } from '@material-ui/icons';
-import MuiAlert from '@material-ui/lab/Alert';
 import emptyImage from '../../static/empty.svg';
-import { closeSnackbar } from '../../actions/general-actions';
 import AddProduct from './add-product';
+import SnackBar from '../general/snackbar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,8 +46,21 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-around',
   },
   imgStyle: {
-    maxHeight: '100%',
-    maxWidth: '100%',
+    width: '80%',
+    height: '80%',
+    alignSelf: 'center',
+  },
+  tableStyle: {
+    height: '300px',
+    [theme.breakpoints.down('xs')]: {
+      width: theme.spacing(36),
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing(50),
+    },
+    [theme.breakpoints.up('md')]: {
+      width: theme.spacing(58),
+    },
   },
   gridStyle: {
     width: 'auto',
@@ -66,9 +72,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Alert(props) {
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
+function CustomNoRowsOverlay() {
+  const classes = useStyles();
+
+  return (
+    <img className={classes.imgStyle} src={emptyImage} alt="Empty products" />
+  );
 }
 
 // eslint-disable-next-line arrow-body-style
@@ -76,12 +85,19 @@ const Products = () => {
   const classes = useStyles();
   const { jwt, storeId } = useSelector((state) => state.auth);
   const [isAddProductOpen, setIsAddProductOpen] = useState(false);
-  const { errors, message, successSnackbar, failureSnackbar } = useSelector(
-    (state) => state.product
-  );
-  const dispatch = useDispatch();
+  const { loadingProduct } = useSelector((state) => state.product);
   const [productData, setProductData] = useState([]);
-
+  const rows = productData.map((data) => ({
+    id: data.name,
+    name: data.name,
+    category: data.category,
+    quantity: data.quantity,
+  }));
+  const columns = [
+    { field: 'name', headerName: 'Name', width: 130 },
+    { field: 'category', headerName: 'Category', width: 150 },
+    { field: 'quantity', headerName: 'quantity', width: 130 },
+  ];
   useEffect(() => {
     const fetchProducts = async () => {
       const res = await axios.get(`/api/products/${storeId}`, {
@@ -92,7 +108,7 @@ const Products = () => {
       setProductData(res.data);
     };
     fetchProducts();
-  }, []);
+  }, [loadingProduct]);
 
   return (
     <div className={classes.root}>
@@ -100,13 +116,18 @@ const Products = () => {
         <h3>Products</h3>
         <GridList cellHeight={300} cols={1} className={classes.gridListStyle}>
           <Grid container className={classes.gridStyle}>
-            {productData.length ? null : (
-              <img
-                className={classes.imgStyle}
-                src={emptyImage}
-                alt="Empty products"
+            <div className={classes.tableStyle}>
+              <DataGrid
+                components={{
+                  NoRowsOverlay: CustomNoRowsOverlay,
+                }}
+                rows={rows}
+                columns={columns}
+                pageSize={4}
+                checkboxSelection
+                Density="compact"
               />
-            )}
+            </div>
           </Grid>
         </GridList>
       </div>
@@ -126,30 +147,7 @@ const Products = () => {
       >
         <AddProduct onClose={() => setIsAddProductOpen(false)} />
       </Dialog>
-      <Snackbar
-        open={successSnackbar}
-        autoHideDuration={6000}
-        onClose={() => dispatch(closeSnackbar('SUCCESS'))}
-      >
-        <Alert
-          onClose={() => dispatch(closeSnackbar('SUCCESS'))}
-          severity="success"
-        >
-          {message}
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={failureSnackbar}
-        autoHideDuration={6000}
-        onClose={() => dispatch(closeSnackbar('FAILURE'))}
-      >
-        <Alert
-          onClose={() => dispatch(closeSnackbar('FAILURE'))}
-          severity="error"
-        >
-          {errors[0].message}
-        </Alert>
-      </Snackbar>
+      <SnackBar />
     </div>
   );
 };
