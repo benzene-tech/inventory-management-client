@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { SET_CURRENT_USER } from './constants/actions';
+import GlobalStyle from './globalStyles';
 import rootReducer from './reducers/root-reducer';
 import Routes from './routes';
 
@@ -32,6 +33,7 @@ signInAttempt().then(() => {
   ReactDOM.render(
     // eslint-disable-next-line react/jsx-filename-extension
     <Provider store={store}>
+      <GlobalStyle />
       <CssBaseline />
       <Routes />
     </Provider>,

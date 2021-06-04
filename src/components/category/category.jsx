@@ -54,10 +54,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-around',
   },
-  imgStyle: {
-    maxHeight: '100%',
-    maxWidth: '100%',
-  },
   gridStyle: {
     width: 'auto',
     height: 'auto',

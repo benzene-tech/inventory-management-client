@@ -1,4 +1,11 @@
-import { makeStyles, Fab, GridList, Grid, Dialog } from '@material-ui/core';
+import {
+  makeStyles,
+  Fab,
+  GridList,
+  Grid,
+  Dialog,
+  Avatar,
+} from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -7,33 +14,13 @@ import { Add } from '@material-ui/icons';
 import emptyImage from '../../static/empty.svg';
 import AddProduct from './add-product';
 import SnackBar from '../general/snackbar';
+import ViewProduct from './view-product';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
       margin: theme.spacing(1),
     },
-  },
-  extendedIcon: {
-    marginRight: theme.spacing(1),
-  },
-  chipStyle: {
-    margin: '5px',
-    maxWidth: '120px',
-  },
-  listStyle: {
-    listStyle: 'none',
-    width: theme.spacing(25),
-    height: theme.spacing(5),
-  },
-  cardStyle: {
-    width: '220px',
-    height: '90px',
-    padding: theme.spacing(1.35),
-    margin: theme.spacing(0.75),
-  },
-  cardHeaderStyle: {
-    padding: theme.spacing(0),
   },
   ProductStyle: {
     width: '100%',
@@ -46,8 +33,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-around',
   },
   imgStyle: {
-    width: '80%',
-    height: '80%',
     alignSelf: 'center',
   },
   tableStyle: {
@@ -59,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
       width: theme.spacing(50),
     },
     [theme.breakpoints.up('md')]: {
-      width: theme.spacing(58),
+      width: theme.spacing(60),
     },
   },
   gridStyle: {
@@ -69,6 +54,13 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  avatarStyle: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  avatarTextStyle: {
+    paddingLeft: theme.spacing(2),
   },
 }));
 
@@ -85,16 +77,32 @@ const Products = () => {
   const classes = useStyles();
   const { jwt, storeId } = useSelector((state) => state.auth);
   const [isAddProductOpen, setIsAddProductOpen] = useState(false);
+  const [isViewProductOpen, setViewProductOpen] = useState(false);
   const { loadingProduct } = useSelector((state) => state.product);
   const [productData, setProductData] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState({});
   const rows = productData.map((data) => ({
     id: data.name,
+    avatar: data.imgURL,
     name: data.name,
     category: data.category,
     quantity: data.quantity,
   }));
+
+  const renderAvatar = (params) => (
+    <div className={classes.avatarStyle}>
+      <Avatar variant="square" alt={params.row.name} src={params.row.avatar} />
+      <p className={classes.avatarTextStyle}> {params.row.name}</p>
+    </div>
+  );
+
   const columns = [
-    { field: 'name', headerName: 'Name', width: 130 },
+    {
+      field: 'name',
+      headerName: 'Name',
+      width: 180,
+      renderCell: renderAvatar,
+    },
     { field: 'category', headerName: 'Category', width: 150 },
     { field: 'quantity', headerName: 'quantity', width: 130 },
   ];
@@ -110,6 +118,13 @@ const Products = () => {
     fetchProducts();
   }, [loadingProduct]);
 
+  const handleRowClick = (rowData) => {
+    setSelectedProduct(
+      productData.find((data) => data.name === rowData.row.name)
+    );
+    setViewProductOpen(true);
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.ProductStyle}>
@@ -123,9 +138,10 @@ const Products = () => {
                 }}
                 rows={rows}
                 columns={columns}
-                pageSize={4}
-                checkboxSelection
-                Density="compact"
+                pageSize={3}
+                disableColumnMenu
+                disableSelectionOnClick
+                onRowClick={(rowData) => handleRowClick(rowData)}
               />
             </div>
           </Grid>
@@ -146,6 +162,15 @@ const Products = () => {
         onClose={() => setIsAddProductOpen(false)}
       >
         <AddProduct onClose={() => setIsAddProductOpen(false)} />
+      </Dialog>
+      <Dialog
+        open={isViewProductOpen}
+        onClose={() => setViewProductOpen(false)}
+      >
+        <ViewProduct
+          onClose={() => setViewProductOpen(false)}
+          product={() => selectedProduct}
+        />
       </Dialog>
       <SnackBar />
     </div>
