@@ -32,9 +32,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-around',
   },
-  imgStyle: {
-    alignSelf: 'center',
-  },
   tableStyle: {
     height: '300px',
     [theme.breakpoints.down('xs')]: {
@@ -64,23 +61,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function CustomNoRowsOverlay() {
-  const classes = useStyles();
-
-  return (
-    <img className={classes.imgStyle} src={emptyImage} alt="Empty products" />
-  );
-}
-
 // eslint-disable-next-line arrow-body-style
 const Products = () => {
   const classes = useStyles();
   const { jwt, storeId } = useSelector((state) => state.auth);
   const [isAddProductOpen, setIsAddProductOpen] = useState(false);
   const [isViewProductOpen, setViewProductOpen] = useState(false);
-  const { loadingProduct } = useSelector((state) => state.product);
+  const { successSnackbar } = useSelector((state) => state.general);
   const [productData, setProductData] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState({});
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const res = await axios.get(`/api/products/${storeId}`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+      setProductData(res.data);
+    };
+    fetchProducts();
+  }, [successSnackbar]);
+
   const rows = productData.map((data) => ({
     id: data.name,
     avatar: data.imgURL,
@@ -106,17 +108,6 @@ const Products = () => {
     { field: 'category', headerName: 'Category', width: 150 },
     { field: 'quantity', headerName: 'quantity', width: 130 },
   ];
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const res = await axios.get(`/api/products/${storeId}`, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
-      setProductData(res.data);
-    };
-    fetchProducts();
-  }, [loadingProduct]);
 
   const handleRowClick = (rowData) => {
     setSelectedProduct(
@@ -132,17 +123,21 @@ const Products = () => {
         <GridList cellHeight={300} cols={1} className={classes.gridListStyle}>
           <Grid container className={classes.gridStyle}>
             <div className={classes.tableStyle}>
-              <DataGrid
-                components={{
-                  NoRowsOverlay: CustomNoRowsOverlay,
-                }}
-                rows={rows}
-                columns={columns}
-                pageSize={3}
-                disableColumnMenu
-                disableSelectionOnClick
-                onRowClick={(rowData) => handleRowClick(rowData)}
-              />
+              {productData.length ? (
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  pageSize={3}
+                  disableColumnMenu
+                  onRowClick={(rowData) => handleRowClick(rowData)}
+                />
+              ) : (
+                <img
+                  className={classes.imgStyle}
+                  src={emptyImage}
+                  alt="Empty Category"
+                />
+              )}
             </div>
           </Grid>
         </GridList>

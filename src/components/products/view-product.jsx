@@ -29,6 +29,10 @@ const styles = (theme) => ({
     top: theme.spacing(1),
     color: theme.palette.grey[500],
   },
+  headerText: {
+    display: 'flex',
+    alignItems: 'center',
+  },
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -49,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     alignSelf: 'center',
   },
+  textStyle: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 const DialogTitle = withStyles(styles)((props) => {
@@ -56,7 +63,9 @@ const DialogTitle = withStyles(styles)((props) => {
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
+      <Typography className={classes.headerText} variant="h6">
+        {children}
+      </Typography>
       {onClose ? (
         <IconButton className={classes.closeButton} onClick={onClose}>
           <CloseIcon />
@@ -108,7 +117,7 @@ const ViewProduct = ({ product, onClose }) => {
       {loadingCategory === true ? <LinearProgress /> : null}
       <DialogTitle onClose={() => onClose()}>
         {name}
-        <Typography>{category}</Typography>
+        <Typography className={classes.textStyle}>{category}</Typography>
       </DialogTitle>
       <DialogContent dividers>
         <Grid container direction="column">

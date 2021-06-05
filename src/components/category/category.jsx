@@ -71,10 +71,8 @@ const Category = () => {
   const [isViewCategoryOpen, setViewCategoryOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState({});
   const [categoryData, setCategoryData] = useState([]);
-
   const { jwt, storeId } = useSelector((state) => state.auth);
-
-  const { loadingProduct } = useSelector((state) => state.category);
+  const { successSnackbar } = useSelector((state) => state.general);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -86,7 +84,7 @@ const Category = () => {
       setCategoryData(res.data);
     };
     fetchCategories();
-  }, [loadingProduct]);
+  }, [successSnackbar]);
 
   return (
     <div className={classes.root}>
