@@ -7,6 +7,8 @@ import {
   TextField,
   Typography,
   makeStyles,
+  LinearProgress,
+  FormHelperText,
 } from '@material-ui/core';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -105,7 +107,7 @@ const AddProduct = ({ onClose }) => {
   const steps = ['Name', 'Features', 'Image'];
   const { jwt, storeId } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
+  const { loadingProduct } = useSelector((state) => state.product);
   const handleNext = () => {
     if (activeStep === 0) {
       if (name === '') {
@@ -153,7 +155,7 @@ const AddProduct = ({ onClose }) => {
           Authorization: `Bearer ${jwt}`,
         },
       });
-      setCategoryList(res.data);
+      if (res.data.length) setCategoryList(res.data);
     };
     fetchCategories();
   }, []);
@@ -161,6 +163,7 @@ const AddProduct = ({ onClose }) => {
   const classes = useStyles();
   return (
     <>
+      {loadingProduct === true ? <LinearProgress /> : null}
       <DialogTitle onClose={() => onClose()}>
         <Stepper
           className={classes.stepperStyle}
@@ -192,6 +195,7 @@ const AddProduct = ({ onClose }) => {
               <InputLabel>Category</InputLabel>
               <Select
                 error={categoryError !== ''}
+                disabled={!categoryList.length}
                 labelId="demo-simple-select-outlined-label"
                 id="demo-simple-select-outlined"
                 value={category}
@@ -204,6 +208,9 @@ const AddProduct = ({ onClose }) => {
                   </MenuItem>
                 ))}
               </Select>
+              {!categoryList.length ? (
+                <FormHelperText>No Category Added</FormHelperText>
+              ) : null}
             </FormControl>
           </Grid>
         ) : activeStep === 1 ? (

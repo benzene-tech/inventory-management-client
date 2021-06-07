@@ -1,37 +1,26 @@
-import { makeStyles, Fab, GridList, Grid, Dialog } from '@material-ui/core';
+import {
+  makeStyles,
+  Fab,
+  GridList,
+  Grid,
+  Dialog,
+  Avatar,
+} from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { DataGrid } from '@material-ui/data-grid';
 import { Add } from '@material-ui/icons';
 import emptyImage from '../../static/empty.svg';
 import AddProduct from './add-product';
+import SnackBar from '../general/snackbar';
+import ViewProduct from './view-product';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
       margin: theme.spacing(1),
     },
-  },
-  extendedIcon: {
-    marginRight: theme.spacing(1),
-  },
-  chipStyle: {
-    margin: '5px',
-    maxWidth: '120px',
-  },
-  listStyle: {
-    listStyle: 'none',
-    width: theme.spacing(25),
-    height: theme.spacing(5),
-  },
-  cardStyle: {
-    width: '220px',
-    height: '90px',
-    padding: theme.spacing(1.35),
-    margin: theme.spacing(0.75),
-  },
-  cardHeaderStyle: {
-    padding: theme.spacing(0),
   },
   ProductStyle: {
     width: '100%',
@@ -43,9 +32,17 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-around',
   },
-  imgStyle: {
-    maxHeight: '100%',
-    maxWidth: '100%',
+  tableStyle: {
+    height: '300px',
+    [theme.breakpoints.down('xs')]: {
+      width: theme.spacing(36),
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing(50),
+    },
+    [theme.breakpoints.up('md')]: {
+      width: theme.spacing(60),
+    },
   },
   gridStyle: {
     width: 'auto',
@@ -55,14 +52,24 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  avatarStyle: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  avatarTextStyle: {
+    paddingLeft: theme.spacing(2),
+  },
 }));
+
 // eslint-disable-next-line arrow-body-style
 const Products = () => {
   const classes = useStyles();
   const { jwt, storeId } = useSelector((state) => state.auth);
   const [isAddProductOpen, setIsAddProductOpen] = useState(false);
-
+  const [isViewProductOpen, setViewProductOpen] = useState(false);
+  const { successSnackbar } = useSelector((state) => state.general);
   const [productData, setProductData] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState({});
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -74,7 +81,40 @@ const Products = () => {
       setProductData(res.data);
     };
     fetchProducts();
-  }, []);
+  }, [successSnackbar]);
+
+  const rows = productData.map((data) => ({
+    id: data.name,
+    avatar: data.imgURL,
+    name: data.name,
+    category: data.category,
+    quantity: data.quantity,
+  }));
+
+  const renderAvatar = (params) => (
+    <div className={classes.avatarStyle}>
+      <Avatar variant="square" alt={params.row.name} src={params.row.avatar} />
+      <p className={classes.avatarTextStyle}> {params.row.name}</p>
+    </div>
+  );
+
+  const columns = [
+    {
+      field: 'name',
+      headerName: 'Name',
+      width: 180,
+      renderCell: renderAvatar,
+    },
+    { field: 'category', headerName: 'Category', width: 150 },
+    { field: 'quantity', headerName: 'quantity', width: 130 },
+  ];
+
+  const handleRowClick = (rowData) => {
+    setSelectedProduct(
+      productData.find((data) => data.name === rowData.row.name)
+    );
+    setViewProductOpen(true);
+  };
 
   return (
     <div className={classes.root}>
@@ -82,12 +122,19 @@ const Products = () => {
         <h3>Products</h3>
         <GridList cellHeight={300} cols={1} className={classes.gridListStyle}>
           <Grid container className={classes.gridStyle}>
-            {productData.length ? null : (
-              <img
-                className={classes.imgStyle}
-                src={emptyImage}
-                alt="Empty products"
-              />
+            {productData.length ? (
+              <div className={classes.tableStyle}>
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  pageSize={3}
+                  disableColumnMenu
+                  disableSelectionOnClick
+                  onRowClick={(rowData) => handleRowClick(rowData)}
+                />
+              </div>
+            ) : (
+              <img src={emptyImage} alt="Empty Poduct" />
             )}
           </Grid>
         </GridList>
@@ -108,6 +155,16 @@ const Products = () => {
       >
         <AddProduct onClose={() => setIsAddProductOpen(false)} />
       </Dialog>
+      <Dialog
+        open={isViewProductOpen}
+        onClose={() => setViewProductOpen(false)}
+      >
+        <ViewProduct
+          onClose={() => setViewProductOpen(false)}
+          product={() => selectedProduct}
+        />
+      </Dialog>
+      <SnackBar />
     </div>
   );
 };

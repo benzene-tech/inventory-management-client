@@ -15,7 +15,6 @@ export const addProduct =
     dispatch({ type: ADDING_PRODUCT });
     try {
       const attributes = features;
-      const quantity = 0;
       const jwt = Cookies.get('jwt');
       const res = await axios.post(
         '/api/products/',
@@ -23,7 +22,6 @@ export const addProduct =
           name,
           category,
           attributes,
-          quantity,
           storeId,
           imgURL,
         },
@@ -45,18 +43,18 @@ export const addProduct =
   };
 
 export const updateProduct =
-  ({ name, features, storeId }) =>
+  ({ name, features, imgUrl, storeId }) =>
   async (dispatch) => {
     dispatch({ type: UPDATE_PRODUCT });
     try {
-      const attributes = features.map((feature) => ({
-        name: feature.name,
-      }));
+      const attributes = features;
+      const imgURL = imgUrl;
       const jwt = Cookies.get('jwt');
       const res = await axios.put(
         `/api/products/${name}`,
         {
           attributes,
+          imgURL,
           storeId,
         },
         {
