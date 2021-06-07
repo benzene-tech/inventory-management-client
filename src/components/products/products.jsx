@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-around',
   },
   tableStyle: {
-    height: '300px',
+    height: '370px',
     [theme.breakpoints.down('xs')]: {
       width: theme.spacing(36),
     },
@@ -120,14 +120,15 @@ const Products = () => {
     <div className={classes.root}>
       <div className={classes.ProductStyle}>
         <h3>Products</h3>
-        <GridList cellHeight={300} cols={1} className={classes.gridListStyle}>
+        <GridList cellHeight={370} cols={1} className={classes.gridListStyle}>
           <Grid container className={classes.gridStyle}>
             {productData.length ? (
               <div className={classes.tableStyle}>
                 <DataGrid
                   rows={rows}
                   columns={columns}
-                  pageSize={3}
+                  pageSize={10}
+                  density="compact"
                   disableColumnMenu
                   disableSelectionOnClick
                   onRowClick={(rowData) => handleRowClick(rowData)}

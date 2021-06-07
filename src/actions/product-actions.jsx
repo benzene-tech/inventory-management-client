@@ -10,10 +10,16 @@ import {
 
 // eslint-disable-next-line import/prefer-default-export
 export const addProduct =
-  ({ name, category, features, storeId, imgURL }) =>
+  ({ name, category, features, storeId, imgUrl }) =>
   async (dispatch) => {
     dispatch({ type: ADDING_PRODUCT });
     try {
+      let imgURL;
+      if (imgUrl === '') {
+        imgURL = name;
+      } else {
+        imgURL = imgUrl;
+      }
       const attributes = features;
       const jwt = Cookies.get('jwt');
       const res = await axios.post(

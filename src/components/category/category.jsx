@@ -90,7 +90,7 @@ const Category = () => {
     <div className={classes.root}>
       <div className={classes.categoryStyle}>
         <h3>Categories</h3>
-        <GridList cellHeight={300} cols={1} className={classes.gridListStyle}>
+        <GridList cellHeight={370} cols={1} className={classes.gridListStyle}>
           <Grid container className={classes.gridStyle}>
             {categoryData.length ? null : (
               <img src={addCategoryImage} alt="Empty Category" />

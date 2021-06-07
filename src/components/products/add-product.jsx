@@ -99,7 +99,7 @@ const AddProduct = ({ onClose }) => {
   const [name, setName] = useState('');
   const [categoryList, setCategoryList] = useState([]);
   const [category, setCategory] = useState('');
-  const [imgURL, setImgURL] = useState('');
+  const [imgUrl, setimgUrl] = useState('');
   const [features, setFeatures] = useState([]);
   const [activeStep, setActiveStep] = useState(0);
   const [nameError, setNameError] = useState('');
@@ -135,11 +135,11 @@ const AddProduct = ({ onClose }) => {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
     if (activeStep === 2) {
-      dispatch(addProduct({ name, category, features, storeId, imgURL }));
+      dispatch(addProduct({ name, category, features, storeId, imgUrl }));
       setName('');
       setCategory('');
       setFeatures([]);
-      setImgURL('');
+      setimgUrl('');
       setActiveStep(0);
     }
   };
@@ -243,9 +243,9 @@ const AddProduct = ({ onClose }) => {
               variant="outlined"
               className={classes.textfieldStyle}
               label="Image URL"
-              value={imgURL}
+              value={imgUrl}
               onChange={(e) => {
-                setImgURL(e.target.value);
+                setimgUrl(e.target.value);
               }}
             />
           </Grid>
