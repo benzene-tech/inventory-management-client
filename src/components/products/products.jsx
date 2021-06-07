@@ -122,23 +122,20 @@ const Products = () => {
         <h3>Products</h3>
         <GridList cellHeight={300} cols={1} className={classes.gridListStyle}>
           <Grid container className={classes.gridStyle}>
-            <div className={classes.tableStyle}>
-              {productData.length ? (
+            {productData.length ? (
+              <div className={classes.tableStyle}>
                 <DataGrid
                   rows={rows}
                   columns={columns}
                   pageSize={3}
                   disableColumnMenu
+                  disableSelectionOnClick
                   onRowClick={(rowData) => handleRowClick(rowData)}
                 />
-              ) : (
-                <img
-                  className={classes.imgStyle}
-                  src={emptyImage}
-                  alt="Empty Category"
-                />
-              )}
-            </div>
+              </div>
+            ) : (
+              <img src={emptyImage} alt="Empty Poduct" />
+            )}
           </Grid>
         </GridList>
       </div>

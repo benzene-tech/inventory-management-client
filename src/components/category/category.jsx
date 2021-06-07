@@ -93,11 +93,7 @@ const Category = () => {
         <GridList cellHeight={300} cols={1} className={classes.gridListStyle}>
           <Grid container className={classes.gridStyle}>
             {categoryData.length ? null : (
-              <img
-                className={classes.imgStyle}
-                src={addCategoryImage}
-                alt="Empty Category"
-              />
+              <img src={addCategoryImage} alt="Empty Category" />
             )}
             {categoryData.map((category) => (
               <Card
