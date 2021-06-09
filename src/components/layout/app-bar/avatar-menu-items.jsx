@@ -1,11 +1,13 @@
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { signOut } from '../../../actions/auth-actions';
 import avatarMenuItems from '../../../constants/avatar-menu-items';
 
 const AvatarMenuItems = React.forwardRef(() => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   return (
     <div>
@@ -18,6 +20,10 @@ const AvatarMenuItems = React.forwardRef(() => {
               if (item.text === 'Sign Out') {
                 // eslint-disable-next-line no-console
                 dispatch(signOut());
+              }
+              if (item.text === 'Profile') {
+                // eslint-disable-next-line no-console
+                history.push('/profile');
               }
             }}
           >
