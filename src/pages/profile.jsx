@@ -20,6 +20,7 @@ import {
 import AppBar from '../components/layout/app-bar/app-bar';
 import Footer from '../components/layout/footer';
 import { updateUser, changePassword } from '../actions/users-actions';
+// import { set } from 'js-cookie';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -82,6 +83,14 @@ const Profile = () => {
   const [showEditButton, setShowEditButton] = useState('visible');
   const [showChangePassword, setShowChangePassword] = useState('visible');
   const [openDialogBox, setOpenDialogBox] = useState(false);
+  const [firstNameFieldError, setFirstNameFieldError] = useState('');
+  const [lastNameFieldError, setLastNameFieldError] = useState('');
+  const [phoneNumberFieldError, setPhoneNumberFieldError] = useState('');
+  const [oldPasswordFieldError, setOldPasswordFieldError] = useState('');
+  const [newPasswordFieldError, setNewPasswordFieldError] = useState('');
+  const [passwordMatchError, setPasswordMatchError] = useState('');
+  const [reenterNewPasswordFieldError, setReenterNewPasswordFieldError] =
+    useState('');
   const [openChanePasswordDialogBox, setOpenChanePasswordDialogBox] =
     useState(false);
   const currentUser = useSelector((state) => state.auth.currentUser);
@@ -102,6 +111,7 @@ const Profile = () => {
   }, []);
 
   const handleFirstNameChange = (event) => {
+    if (event.target.value !== '') setFirstNameFieldError('');
     setUserData({
       firstName: event.target.value,
       lastName: userData.lastName,
@@ -111,6 +121,7 @@ const Profile = () => {
   };
 
   const handleLastNameChange = (event) => {
+    if (event.target.value !== '') setLastNameFieldError('');
     setUserData({
       firstName: userData.firstName,
       lastName: event.target.value,
@@ -129,11 +140,57 @@ const Profile = () => {
   };
 
   const handlePhoneNumberChange = (event) => {
+    if (event.target.value !== '') setPhoneNumberFieldError('');
     setUserData({
       firstName: userData.firstName,
       lastName: userData.lastName,
       dob: userData.dob,
       phoneNumber: event.target.value,
+    });
+  };
+
+  const handleClickOpenDialogBox = () => {
+    setOpenDialogBox(true);
+  };
+
+  const handleCloseDialogBox = () => {
+    setOpenDialogBox(false);
+  };
+
+  const handleOpenChangePasswordDialogBox = () => {
+    setOpenChanePasswordDialogBox(true);
+  };
+
+  const handleCloseChangePasswordDialogBox = () => {
+    setOpenChanePasswordDialogBox(false);
+  };
+
+  const handleOldPasswordChange = (event) => {
+    if (event.target.value !== '') setOldPasswordFieldError('');
+    setUserCredential({
+      oldPassword: event.target.value,
+      newPassword: userCredential.newPassword,
+      reenterNewPassword: userCredential.reenterNewPassword,
+    });
+  };
+
+  const handleNewPasswordChange = (event) => {
+    setPasswordMatchError('');
+    if (event.target.value !== '') setNewPasswordFieldError('');
+    setUserCredential({
+      oldPassword: userCredential.oldPassword,
+      newPassword: event.target.value,
+      reenterNewPassword: userCredential.reenterNewPassword,
+    });
+  };
+
+  const handleReenterNewPasswordChange = (event) => {
+    setPasswordMatchError('');
+    if (event.target.value !== '') setReenterNewPasswordFieldError('');
+    setUserCredential({
+      oldPassword: userCredential.oldPassword,
+      newPassword: userCredential.newPassword,
+      reenterNewPassword: event.target.value,
     });
   };
 
@@ -166,45 +223,6 @@ const Profile = () => {
     setShowEditButton('visible');
     setShowChangePassword('visible');
     setUserData(tempUserData);
-  };
-
-  const handleClickOpenDialogBox = () => {
-    setOpenDialogBox(true);
-  };
-
-  const handleCloseDialogBox = () => {
-    setOpenDialogBox(false);
-  };
-
-  const handleOpenChangePasswordDialogBox = () => {
-    setOpenChanePasswordDialogBox(true);
-  };
-
-  const handleCloseChangePasswordDialogBox = () => {
-    setOpenChanePasswordDialogBox(false);
-  };
-
-  const handleOldPasswordChange = (event) => {
-    setUserCredential({
-      oldPassword: event.target.value,
-      newPassword: userCredential.newPassword,
-      reenterNewPassword: userCredential.reenterNewPassword,
-    });
-  };
-
-  const handleNewPasswordChange = (event) => {
-    setUserCredential({
-      oldPassword: userCredential.oldPassword,
-      newPassword: event.target.value,
-      reenterNewPassword: userCredential.reenterNewPassword,
-    });
-  };
-  const handleReenterNewPasswordChange = (event) => {
-    setUserCredential({
-      oldPassword: userCredential.oldPassword,
-      newPassword: userCredential.newPassword,
-      reenterNewPassword: event.target.value,
-    });
   };
 
   const changePasswordCredential = () => {
@@ -260,40 +278,65 @@ const Profile = () => {
             <DialogContent style={{ display: 'flex', flexDirection: 'column' }}>
               <TextField
                 required
+                type="password"
                 id="oldPassword"
                 label="Old Password"
                 variant="outlined"
                 onChange={(e) => {
                   handleOldPasswordChange(e);
                 }}
+                helperText={oldPasswordFieldError}
                 className={classes.textbox}
               />
               <TextField
                 required
+                type="password"
                 id="nwePassword"
                 label="New password"
                 variant="outlined"
                 onChange={(e) => {
                   handleNewPasswordChange(e);
                 }}
+                helperText={newPasswordFieldError}
                 className={classes.textbox}
               />
               <TextField
                 required
+                type="password"
                 id="reenterNwePassword"
                 label="Re-enter new password"
                 variant="outlined"
                 onChange={(e) => {
                   handleReenterNewPasswordChange(e);
                 }}
+                helperText={passwordMatchError + reenterNewPasswordFieldError}
                 className={classes.textbox}
               />
             </DialogContent>
             <DialogActions>
               <Button
                 onClick={() => {
-                  handleCloseChangePasswordDialogBox();
-                  changePasswordCredential();
+                  if (userCredential.oldPassword === '')
+                    setOldPasswordFieldError('Old-pasword field is empty');
+                  else if (userCredential.newPassword === '')
+                    setNewPasswordFieldError('New-password field is empty');
+                  else if (userCredential.reenterNewPassword === '')
+                    setReenterNewPasswordFieldError(
+                      'Re-enter new-password field is empty'
+                    );
+                  else if (
+                    userCredential.newPassword !== '' &&
+                    userCredential.reenterNewPassword !== '' &&
+                    userCredential.newPassword !==
+                      userCredential.reenterNewPassword
+                  ) {
+                    setPasswordMatchError(
+                      'New password and re-enter new password not matching'
+                    );
+                  } else {
+                    handleCloseChangePasswordDialogBox();
+                    changePasswordCredential();
+                  }
                 }}
                 color="primary"
               >
@@ -327,6 +370,7 @@ const Profile = () => {
             InputProps={{
               readOnly: userDataReadOnly,
             }}
+            helperText={firstNameFieldError}
             className={classes.textbox}
           />
 
@@ -344,6 +388,7 @@ const Profile = () => {
             InputProps={{
               readOnly: userDataReadOnly,
             }}
+            helperText={lastNameFieldError}
             className={classes.textbox}
           />
           <TextField
@@ -377,6 +422,7 @@ const Profile = () => {
             InputProps={{
               readOnly: userDataReadOnly,
             }}
+            helperText={phoneNumberFieldError}
             className={classes.textbox}
           />
         </form>
@@ -395,7 +441,13 @@ const Profile = () => {
           color="primary"
           startIcon={<SaveIcon />}
           onClick={() => {
-            handleClickOpenDialogBox();
+            if (userData.firstName === '')
+              setFirstNameFieldError('Firstname field is empty');
+            else if (userData.lastName === '')
+              setLastNameFieldError('Lastname field is empty');
+            else if (userData.phoneNumber === '')
+              setPhoneNumberFieldError('Phone number field is empty');
+            else handleClickOpenDialogBox();
           }}
         >
           Save

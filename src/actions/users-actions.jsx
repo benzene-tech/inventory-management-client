@@ -102,7 +102,7 @@ export const changePassword =
     try {
       const jwt = Cookies.get('jwt');
       const res = await axios.put(
-        '/api/users',
+        '/api/users/changepassword',
         { oldPassword, newPassword },
         {
           headers: {
