@@ -9,7 +9,11 @@ import {
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { DataGrid } from '@material-ui/data-grid';
+import {
+  DataGrid,
+  GridToolbarContainer,
+  GridToolbarExport,
+} from '@material-ui/data-grid';
 import { Add } from '@material-ui/icons';
 import emptyImage from '../../static/empty.svg';
 import AddProduct from './add-product';
@@ -61,6 +65,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarExport />
+    </GridToolbarContainer>
+  );
+}
 // eslint-disable-next-line arrow-body-style
 const Products = () => {
   const classes = useStyles();
@@ -132,6 +143,9 @@ const Products = () => {
                   disableColumnMenu
                   disableSelectionOnClick
                   onRowClick={(rowData) => handleRowClick(rowData)}
+                  components={{
+                    Toolbar: CustomToolbar,
+                  }}
                 />
               </div>
             ) : (
