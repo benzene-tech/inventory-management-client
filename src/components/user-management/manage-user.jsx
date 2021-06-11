@@ -1,16 +1,41 @@
-/* eslint-disable no-console */
-import { makeStyles, GridList, Grid, Avatar, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import {
+  makeStyles,
+  GridList,
+  Grid,
+  Avatar,
+  Button,
+  Typography,
+  IconButton,
+} from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
-import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import {
   DataGrid,
   GridToolbarContainer,
   GridToolbarExport,
 } from '@material-ui/data-grid';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import CloseIcon from '@material-ui/icons/Close';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Dialog from '@material-ui/core/Dialog';
 import addUsers from '../../static/addUsers.svg';
+import { deleteUser } from '../../actions/manage-user-actions';
+
+const styles = (theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(2),
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  },
+});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,12 +82,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const DialogTitle = withStyles(styles)((props) => {
+  const { children, classes, onClose, ...other } = props;
+  return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography variant="h6">{children}</Typography>
+      {onClose ? (
+        <IconButton className={classes.closeButton} onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
+  );
+});
+
+const DialogActions = withStyles((theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(1),
+    justifyContent: 'center',
+  },
+}))(MuiDialogActions);
+
 const ManageUsers = () => {
   const classes = useStyles();
   const { jwt, storeId } = useSelector((state) => state.auth);
   const { successSnackbar } = useSelector((state) => state.general);
   const [usersData, setUsersData] = useState([]);
-  const [isEdit, setIsEdit] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState({});
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -97,26 +148,22 @@ const ManageUsers = () => {
       field: 'username',
       headerName: 'Username',
       width: 130,
-      editable: isEdit,
     },
     {
       field: 'phoneNumber',
       headerName: 'Phone No',
       width: 130,
-      editable: isEdit,
     },
     {
       field: 'dob',
       headerName: 'DOB',
       width: 130,
       type: 'date',
-      editable: isEdit,
     },
     {
       field: 'userType',
       headerName: 'Role',
       width: 100,
-      editable: isEdit,
     },
   ];
 
@@ -129,44 +176,62 @@ const ManageUsers = () => {
     userType: data.userType,
   }));
 
-  const handleEditCellChangeCommitted = React.useCallback(
-    ({ id, field, props }) => {
-      if (field) {
-        const data = props;
-        console.log(data.value);
-        const updatedRows = rows.map((row) => {
-          if (row.id === id) {
-            return { ...row, field };
-          }
-          return row;
-        });
-        console.log(updatedRows);
-      }
-    },
-    [rows]
-  );
-
   function CustomToolbar() {
     return (
       <GridToolbarContainer>
         <GridToolbarExport />
-        <Button
-          color="primary"
-          onClick={() => {
-            if (isEdit) {
-              console.log(rows);
-              setIsEdit(false);
-            } else {
-              setIsEdit(true);
-            }
-          }}
-          startIcon={isEdit ? <SaveIcon /> : <EditIcon />}
-        >
-          {isEdit ? 'Save' : 'Edit'}
-        </Button>
+        {isDelete ? (
+          <div>
+            <Button
+              size="small"
+              autoFocus
+              color="secondary"
+              startIcon={<DeleteIcon />}
+              onClick={() => {
+                setDeleteOpen(true);
+              }}
+            >
+              Delete
+            </Button>
+            <Dialog
+              onClose={() => setDeleteOpen(false)}
+              open={deleteOpen}
+              aria-labelledby="alert-dialog-title"
+            >
+              <DialogTitle id="alert-dialog-title">Are you sure ?</DialogTitle>
+              <DialogActions>
+                <Button
+                  onClick={() => {
+                    dispatch(deleteUser({ selectedRow }));
+                    setDeleteOpen(false);
+                  }}
+                  color="secondary"
+                >
+                  Delete
+                </Button>
+                <Button
+                  onClick={() => {
+                    setDeleteOpen(false);
+                  }}
+                  color="primary"
+                  autoFocus
+                >
+                  Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        ) : null}
       </GridToolbarContainer>
     );
   }
+
+  const handleRowClick = (rowData) => {
+    setIsDelete(true);
+    setSelectedRow(rowData.id);
+    // eslint-disable-next-line no-console
+    console.log(rowData);
+  };
 
   return (
     <div className={classes.root}>
@@ -181,10 +246,10 @@ const ManageUsers = () => {
                   columns={columns}
                   pageSize={6}
                   disableColumnMenu
-                  onEditCellChangeCommitted={handleEditCellChangeCommitted}
                   components={{
                     Toolbar: CustomToolbar,
                   }}
+                  onRowClick={(rowData) => handleRowClick(rowData)}
                 />
               </div>
             ) : (
