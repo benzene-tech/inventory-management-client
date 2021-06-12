@@ -22,3 +22,11 @@ export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const PRODUCT_FAILURE = 'PRODUCT_FAILURE';
 export const PRODUCT_SUCCESS = 'PRODUCT_SUCCESS';
+
+// export const GET_USER = 'GET_USER';
+// export const GET_ALL_USERS = 'GET_ALL_USERS';
+export const UPDATE_USER = 'UPDATE_USER';
+export const DELETE_USER = 'DELETE_USER';
+export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
+export const USER_FAILURE = 'USER_FAILURE';
+export const USER_SUCCESS = 'USER_SUCCESS';
