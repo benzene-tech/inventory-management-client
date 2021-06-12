@@ -1,6 +1,7 @@
 import TextField from '@material-ui/core/TextField';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import SaveIcon from '@material-ui/icons/Save';
@@ -16,11 +17,15 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  // LinearProgress,
+  // Snackbar,
 } from '@material-ui/core';
+// import MuiAlert from '@material-ui/lab/Alert';
 import AppBar from '../components/layout/app-bar/app-bar';
 import Footer from '../components/layout/footer';
 import { updateUser, changePassword } from '../actions/users-actions';
 // import { set } from 'js-cookie';
+// import { closeSnackbar } from '../actions/general-actions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,6 +62,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// function Alert(props) {
+//   // eslint-disable-next-line react/jsx-props-no-spreading
+//   return <MuiAlert elevation={6} variant="filled" {...props} />;
+// }
+
 const Profile = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -88,13 +98,16 @@ const Profile = () => {
   const [phoneNumberFieldError, setPhoneNumberFieldError] = useState('');
   const [oldPasswordFieldError, setOldPasswordFieldError] = useState('');
   const [newPasswordFieldError, setNewPasswordFieldError] = useState('');
-  const [passwordMatchError, setPasswordMatchError] = useState('');
+  const [passwordMismatchError, setPasswordMismatchError] = useState('');
   const [reenterNewPasswordFieldError, setReenterNewPasswordFieldError] =
     useState('');
   const [openChanePasswordDialogBox, setOpenChanePasswordDialogBox] =
     useState(false);
   const currentUser = useSelector((state) => state.auth.currentUser);
-  const { jwt } = useSelector((state) => state.auth);
+  const jwt = Cookies.get('jwt');
+  // const { jwt } = useSelector((state) => state.auth);
+  // const { errors, message, loadingUser, successSnackbar, failureSnackbar } =
+  //   useSelector((state) => state.users);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -175,7 +188,7 @@ const Profile = () => {
   };
 
   const handleNewPasswordChange = (event) => {
-    setPasswordMatchError('');
+    setPasswordMismatchError('');
     if (event.target.value !== '') setNewPasswordFieldError('');
     setUserCredential({
       oldPassword: userCredential.oldPassword,
@@ -185,7 +198,7 @@ const Profile = () => {
   };
 
   const handleReenterNewPasswordChange = (event) => {
-    setPasswordMatchError('');
+    setPasswordMismatchError('');
     if (event.target.value !== '') setReenterNewPasswordFieldError('');
     setUserCredential({
       oldPassword: userCredential.oldPassword,
@@ -269,6 +282,7 @@ const Profile = () => {
           >
             Change password
           </Button>
+          {/* {loadingUser === true ? <LinearProgress /> : null} */}
           <Dialog
             open={openChanePasswordDialogBox}
             onClose={handleCloseChangePasswordDialogBox}
@@ -298,6 +312,7 @@ const Profile = () => {
                   handleNewPasswordChange(e);
                 }}
                 helperText={newPasswordFieldError}
+                error={passwordMismatchError !== ''}
                 className={classes.textbox}
               />
               <TextField
@@ -309,7 +324,10 @@ const Profile = () => {
                 onChange={(e) => {
                   handleReenterNewPasswordChange(e);
                 }}
-                helperText={passwordMatchError + reenterNewPasswordFieldError}
+                helperText={
+                  passwordMismatchError + reenterNewPasswordFieldError
+                }
+                error={passwordMismatchError !== ''}
                 className={classes.textbox}
               />
             </DialogContent>
@@ -318,9 +336,9 @@ const Profile = () => {
                 onClick={() => {
                   if (userCredential.oldPassword === '')
                     setOldPasswordFieldError('Old-pasword field is empty');
-                  else if (userCredential.newPassword === '')
+                  if (userCredential.newPassword === '')
                     setNewPasswordFieldError('New-password field is empty');
-                  else if (userCredential.reenterNewPassword === '')
+                  if (userCredential.reenterNewPassword === '')
                     setReenterNewPasswordFieldError(
                       'Re-enter new-password field is empty'
                     );
@@ -330,7 +348,7 @@ const Profile = () => {
                     userCredential.newPassword !==
                       userCredential.reenterNewPassword
                   ) {
-                    setPasswordMatchError(
+                    setPasswordMismatchError(
                       'New password and re-enter new password not matching'
                     );
                   } else {
@@ -345,6 +363,10 @@ const Profile = () => {
               <Button
                 onClick={() => {
                   handleCloseChangePasswordDialogBox();
+                  setPasswordMismatchError('');
+                  setOldPasswordFieldError('');
+                  setNewPasswordFieldError('');
+                  setReenterNewPasswordFieldError('');
                   history.push('/profile');
                 }}
                 color="primary"

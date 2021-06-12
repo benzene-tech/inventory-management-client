@@ -36,14 +36,14 @@ const usersReducer = (state = initState, action) => {
       return {
         ...state,
         message: action.payload,
-        loadingProduct: false,
+        loadingUser: false,
         failureSnackbar: true,
       };
     case USER_SUCCESS:
       return {
         ...state,
         message: action.payload,
-        loadingProduct: false,
+        loadingUser: false,
         successSnackbar: true,
       };
     default:
