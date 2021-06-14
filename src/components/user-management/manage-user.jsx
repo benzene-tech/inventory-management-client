@@ -3,12 +3,14 @@ import {
   makeStyles,
   GridList,
   Grid,
+  Fab,
   Avatar,
   Button,
   Typography,
   IconButton,
 } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
+import { Add } from '@material-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import {
@@ -21,8 +23,10 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Dialog from '@material-ui/core/Dialog';
+import SnackBar from '../general/snackbar';
 import addUsers from '../../static/addUsers.svg';
 import { deleteUser } from '../../actions/manage-user-actions';
+import AddUser from './add-user';
 
 const styles = (theme) => ({
   root: {
@@ -113,6 +117,7 @@ const ManageUsers = () => {
   const [isDelete, setIsDelete] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState({});
+  const [isAddUserOpen, setIsAddUserOpen] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -257,6 +262,20 @@ const ManageUsers = () => {
             )}
           </Grid>
         </GridList>
+        <div className={classes.buttonStyle}>
+          <Fab
+            color="primary"
+            variant="extended"
+            onClick={() => setIsAddUserOpen(true)}
+          >
+            <Add className={classes.extendedIcon} />
+            User
+          </Fab>
+        </div>
+        <Dialog open={isAddUserOpen} onClose={() => setIsAddUserOpen(false)}>
+          <AddUser onClose={() => setIsAddUserOpen(false)} />
+        </Dialog>
+        <SnackBar />
       </div>
     </div>
   );
