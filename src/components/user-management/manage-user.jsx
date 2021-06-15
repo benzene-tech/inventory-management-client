@@ -234,8 +234,6 @@ const ManageUsers = () => {
   const handleRowClick = (rowData) => {
     setIsDelete(true);
     setSelectedRow(rowData.id);
-    // eslint-disable-next-line no-console
-    console.log(rowData);
   };
 
   return (

@@ -18,7 +18,6 @@ import React from 'react';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import { signUp } from '../../actions/auth-actions';
 
@@ -37,8 +36,16 @@ const styles = (theme) => ({
 
 const useStyles = makeStyles((theme) => ({
   textfieldStyle: {
-    width: '100px',
-    margin: theme.spacing(0.5),
+    width: '160px',
+    margin: theme.spacing(1),
+  },
+  radioStyle: {
+    width: '200px',
+    margin: theme.spacing(1),
+    display: 'flex',
+    flexWrap: 'wrap',
+    flexDirection: 'column',
+    alignContent: 'center',
   },
   inputGridStyle: {
     justifyContent: 'center',
@@ -124,6 +131,10 @@ const AddUser = ({ onClose }) => {
       errors.username = 'Must be 20 characters or less';
     }
 
+    if (!values.dob) {
+      errors.dob = 'Required';
+    }
+
     return errors;
   };
 
@@ -159,11 +170,7 @@ const AddUser = ({ onClose }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.firstName}
-              helperText={
-                formik.errors.firstName ? (
-                  <div>{formik.errors.firstName}</div>
-                ) : null
-              }
+              error={formik.errors.firstName}
             />
 
             <TextField
@@ -177,11 +184,7 @@ const AddUser = ({ onClose }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.lastName}
-              helperText={
-                formik.errors.lastName ? (
-                  <div>{formik.errors.lastName}</div>
-                ) : null
-              }
+              error={formik.errors.lastName}
             />
 
             <TextField
@@ -195,11 +198,7 @@ const AddUser = ({ onClose }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.phoneNumber}
-              helperText={
-                formik.errors.phoneNumber ? (
-                  <div>{formik.errors.phoneNumber}</div>
-                ) : null
-              }
+              error={formik.errors.phoneNumber}
             />
 
             <TextField
@@ -208,7 +207,6 @@ const AddUser = ({ onClose }) => {
               type="date"
               label="dob"
               size="small"
-              style={{ width: '170px' }}
               variant="outlined"
               InputLabelProps={{
                 shrink: true,
@@ -216,9 +214,7 @@ const AddUser = ({ onClose }) => {
               className={classes.textfieldStyle}
               onChange={formik.handleChange}
               value={formik.values.dob}
-              helperText={
-                formik.errors.dob ? <div>{formik.errors.dob}</div> : null
-              }
+              error={formik.errors.dob}
             />
 
             <TextField
@@ -226,20 +222,16 @@ const AddUser = ({ onClose }) => {
               name="username"
               type="text"
               size="small"
-              label="user name"
-              variant="outlined"
+              label="username"
               className={classes.textfieldStyle}
+              variant="outlined"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.username}
-              helperText={
-                formik.errors.username ? (
-                  <div>{formik.errors.username}</div>
-                ) : null
-              }
+              error={formik.errors.username}
             />
-
-            <FormControl component="fieldset">
+            <br />
+            <div className={classes.radioStyle}>
               <FormLabel component="legend">Role</FormLabel>
               <RadioGroup
                 name="userType"
@@ -257,7 +249,7 @@ const AddUser = ({ onClose }) => {
                   label="User"
                 />
               </RadioGroup>
-            </FormControl>
+            </div>
           </Grid>
         </DialogContent>
         <DialogActions>
