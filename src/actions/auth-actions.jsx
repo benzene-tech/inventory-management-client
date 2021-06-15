@@ -43,9 +43,9 @@ export const signUp =
         password,
       });
 
-      const { user } = res.data;
+      const { message } = res.data;
 
-      dispatch({ type: SIGN_UP_SUCCESS, payload: user });
+      dispatch({ type: SIGN_UP_SUCCESS, payload: message });
     } catch (err) {
       const { errors } = err.response.data;
 

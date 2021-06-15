@@ -3,6 +3,9 @@ import {
   SIGNING_IN,
   SIGN_IN_SUCCESS,
   SIGN_IN_FAILURE,
+  SIGNING_UP,
+  SIGN_UP_SUCCESS,
+  SIGN_UP_FAILURE,
   SIGN_OUT,
   SET_CURRENT_USER,
 } from '../constants/actions';
@@ -12,6 +15,7 @@ const initState = {
   storeId: null,
   authToken: null,
   signingIn: false,
+  signingUp: false,
   jwt: Cookies.get('jwt'),
 };
 
@@ -21,6 +25,11 @@ const categoryReducer = (state = initState, action) => {
       return {
         ...state,
         signingIn: true,
+      };
+    case SIGNING_UP:
+      return {
+        ...state,
+        signingUp: true,
       };
     case SIGN_IN_SUCCESS:
       return {
@@ -36,6 +45,16 @@ const categoryReducer = (state = initState, action) => {
         currentUser: null,
         errors: action.payload,
         signingIn: false,
+      };
+    case SIGN_UP_SUCCESS:
+      return {
+        ...state,
+        signingUp: false,
+      };
+    case SIGN_UP_FAILURE:
+      return {
+        ...state,
+        signingUp: false,
       };
     case SET_CURRENT_USER:
       return {
