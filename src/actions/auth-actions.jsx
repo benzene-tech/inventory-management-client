@@ -6,6 +6,9 @@ import {
   SIGN_IN_FAILURE,
   SIGN_OUT,
   SET_CURRENT_USER,
+  SIGNING_UP,
+  SIGN_UP_SUCCESS,
+  SIGN_UP_FAILURE,
 } from '../constants/actions';
 
 export const signIn = (credentials) => async (dispatch) => {
@@ -22,6 +25,33 @@ export const signIn = (credentials) => async (dispatch) => {
     dispatch({ type: SIGN_IN_FAILURE, payload: errors });
   }
 };
+
+export const signUp =
+  ({ firstName, lastName, dob, userType, username, phoneNumber }, storeId) =>
+  async (dispatch) => {
+    dispatch({ type: SIGNING_UP });
+    try {
+      const password = 'username@123';
+      const res = await axios.post('/api/auth/sign-up', {
+        firstName,
+        lastName,
+        dob,
+        userType,
+        username,
+        phoneNumber,
+        storeId,
+        password,
+      });
+
+      const { message } = res.data;
+
+      dispatch({ type: SIGN_UP_SUCCESS, payload: message });
+    } catch (err) {
+      const { errors } = err.response.data;
+
+      dispatch({ type: SIGN_UP_FAILURE, payload: errors });
+    }
+  };
 
 export const getCurrentUser = () => async (dispatch) => {
   try {

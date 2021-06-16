@@ -19,7 +19,7 @@ const SnackBar = () => {
     <div>
       <Snackbar
         open={successSnackbar}
-        autoHideDuration={6000}
+        autoHideDuration={4000}
         onClose={() => dispatch(closeSnackbar('SUCCESS'))}
       >
         <Alert
@@ -31,7 +31,7 @@ const SnackBar = () => {
       </Snackbar>
       <Snackbar
         open={failureSnackbar}
-        autoHideDuration={6000}
+        autoHideDuration={4000}
         onClose={() => dispatch(closeSnackbar('FAILURE'))}
       >
         <Alert

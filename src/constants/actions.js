@@ -2,8 +2,11 @@ export const SET_DRAWER_CONTEXT = 'SET_DRAWER_CONTEXT';
 export const TOGGLE_DRAWER = 'TOGGLE_DRAWER';
 
 export const SIGNING_IN = 'SIGNING_IN';
+export const SIGNING_UP = 'SIGNING_UP';
 export const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS';
 export const SIGN_IN_FAILURE = 'SIGN_IN_FAILURE';
+export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
+export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
 export const SIGN_OUT = 'SIGN_OUT';
 
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
@@ -23,8 +26,6 @@ export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const PRODUCT_FAILURE = 'PRODUCT_FAILURE';
 export const PRODUCT_SUCCESS = 'PRODUCT_SUCCESS';
 
-// export const GET_USER = 'GET_USER';
-// export const GET_ALL_USERS = 'GET_ALL_USERS';
 export const UPDATE_USER = 'UPDATE_USER';
 export const DELETE_USER = 'DELETE_USER';
 export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';

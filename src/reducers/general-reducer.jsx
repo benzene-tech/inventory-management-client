@@ -7,6 +7,10 @@ import {
   CLOSE_FAILURE_SNACKBAR,
   PRODUCT_FAILURE,
   PRODUCT_SUCCESS,
+  USER_SUCCESS,
+  USER_FAILURE,
+  SIGN_UP_SUCCESS,
+  SIGN_UP_FAILURE,
 } from '../constants/actions';
 
 const initState = {
@@ -50,6 +54,30 @@ const generalReducer = (state = initState, action) => {
         ...state,
         errors: action.payload,
         loadingProduct: false,
+        failureSnackbar: true,
+      };
+    case USER_SUCCESS:
+      return {
+        ...state,
+        message: action.payload,
+        successSnackbar: true,
+      };
+    case USER_FAILURE:
+      return {
+        ...state,
+        errors: action.payload,
+        failureSnackbar: true,
+      };
+    case SIGN_UP_SUCCESS:
+      return {
+        ...state,
+        message: action.payload,
+        successSnackbar: true,
+      };
+    case SIGN_UP_FAILURE:
+      return {
+        ...state,
+        errors: action.payload,
         failureSnackbar: true,
       };
     case CLOSE_SUCCESS_SNACKBAR:

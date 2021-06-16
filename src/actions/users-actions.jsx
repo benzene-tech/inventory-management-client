@@ -75,26 +75,31 @@ export const updateUser =
     }
   };
 
-export const deleteUser = (username) => async (dispatch) => {
-  dispatch({ type: DELETE_USER });
-  try {
-    const jwt = Cookies.get('jwt');
-    const res = await axios.delete('/api/users', {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-      params: { username },
-    });
+export const deleteUser =
+  ({ selectedRow }) =>
+  async (dispatch) => {
+    dispatch({ type: DELETE_USER });
+    const username = selectedRow;
+    try {
+      const jwt = Cookies.get('jwt');
+      const res = await axios.delete('/api/users', {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+        params: {
+          username,
+        },
+      });
 
-    const { user } = await res.data;
+      const { message } = await res.data;
 
-    dispatch({ type: USER_SUCCESS, payload: user });
-  } catch (err) {
-    const { errors } = err.response.data;
+      dispatch({ type: USER_SUCCESS, payload: message });
+    } catch (err) {
+      const { errors } = err.response.data;
 
-    dispatch({ type: USER_FAILURE, payload: errors });
-  }
-};
+      dispatch({ type: USER_FAILURE, payload: errors });
+    }
+  };
 
 export const changePassword =
   (username, oldPassword, newPassword) => async (dispatch) => {
