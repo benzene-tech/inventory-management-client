@@ -6,6 +6,7 @@ import {
   TextField,
   Typography,
   makeStyles,
+  LinearProgress,
 } from '@material-ui/core';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
@@ -100,7 +101,7 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions);
 
 const AddUser = ({ onClose }) => {
-  const { storeId } = useSelector((state) => state.auth);
+  const { storeId, signingUp } = useSelector((state) => state.auth);
 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -156,6 +157,7 @@ const AddUser = ({ onClose }) => {
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
+        {signingUp === true ? <LinearProgress /> : null}
         <DialogTitle onClose={() => onClose()}>Add User</DialogTitle>
         <DialogContent dividers>
           <Grid container direction="row" className={classes.inputGridStyle}>
@@ -170,7 +172,6 @@ const AddUser = ({ onClose }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.firstName}
-              error={formik.errors.firstName}
             />
 
             <TextField
@@ -184,7 +185,6 @@ const AddUser = ({ onClose }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.lastName}
-              error={formik.errors.lastName}
             />
 
             <TextField
@@ -198,7 +198,6 @@ const AddUser = ({ onClose }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.phoneNumber}
-              error={formik.errors.phoneNumber}
             />
 
             <TextField
@@ -214,7 +213,6 @@ const AddUser = ({ onClose }) => {
               className={classes.textfieldStyle}
               onChange={formik.handleChange}
               value={formik.values.dob}
-              error={formik.errors.dob}
             />
 
             <TextField
@@ -228,9 +226,7 @@ const AddUser = ({ onClose }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.username}
-              error={formik.errors.username}
             />
-            <br />
             <div className={classes.radioStyle}>
               <FormLabel component="legend">Role</FormLabel>
               <RadioGroup

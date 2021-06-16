@@ -19,7 +19,7 @@ const initState = {
   jwt: Cookies.get('jwt'),
 };
 
-const categoryReducer = (state = initState, action) => {
+const authReducer = (state = initState, action) => {
   switch (action.type) {
     case SIGNING_IN:
       return {
@@ -74,4 +74,4 @@ const categoryReducer = (state = initState, action) => {
   }
 };
 
-export default categoryReducer;
+export default authReducer;
