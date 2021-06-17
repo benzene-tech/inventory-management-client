@@ -20,6 +20,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
+import Yup from 'yup';
 import { signUp } from '../../actions/auth-actions';
 
 const styles = (theme) => ({
@@ -105,39 +106,8 @@ const AddUser = ({ onClose }) => {
 
   const classes = useStyles();
   const dispatch = useDispatch();
-  const validate = (values) => {
-    const errors = {};
-
-    if (!values.firstName) {
-      errors.firstName = 'Required';
-    } else if (values.firstName.length > 15) {
-      errors.firstName = 'Must be 15 characters or less';
-    }
-
-    if (!values.lastName) {
-      errors.lastName = 'Required';
-    } else if (values.lastName.length > 20) {
-      errors.lastName = 'Must be 20 characters or less';
-    }
-
-    if (!values.phoneNumber) {
-      errors.phoneNumber = 'Required';
-    } else if (values.phoneNumber.length !== 10) {
-      errors.phoneNumber = 'Invalid phoneNumber';
-    }
-
-    if (!values.username) {
-      errors.username = 'Required';
-    } else if (values.username.length > 20) {
-      errors.username = 'Must be 20 characters or less';
-    }
-
-    if (!values.dob) {
-      errors.dob = 'Required';
-    }
-
-    return errors;
-  };
+  const phoneRegExp =
+    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
   const formik = useFormik({
     initialValues: {
@@ -148,7 +118,20 @@ const AddUser = ({ onClose }) => {
       dob: '',
       userType: 'user',
     },
-    validate,
+    validationSchema: Yup.object({
+      firstName: Yup.string()
+        .max(15, 'Maximum 15 characters')
+        .required('Required!'),
+      lastName: Yup.string()
+        .max(15, 'Maximum 15 characters')
+        .required('Required!'),
+      phoneNumber: Yup.string()
+        .matches(phoneRegExp, 'Phone number is not valid')
+        .length(10, 'Phone number is not valid')
+        .required('Required!'),
+      username: Yup.string().required('Required!'),
+      dob: Yup.date().required('Required!'),
+    }),
     onSubmit: (values) => {
       dispatch(signUp(values, storeId));
     },
@@ -172,6 +155,10 @@ const AddUser = ({ onClose }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.firstName}
+              helperText={
+                formik.errors.firstName &&
+                formik.touched.firstName && <p>{formik.errors.firstName}</p>
+              }
             />
 
             <TextField
@@ -185,6 +172,10 @@ const AddUser = ({ onClose }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.lastName}
+              helperText={
+                formik.errors.lastName &&
+                formik.touched.lastName && <p>{formik.errors.lastName}</p>
+              }
             />
 
             <TextField
@@ -198,6 +189,10 @@ const AddUser = ({ onClose }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.phoneNumber}
+              helperText={
+                formik.errors.phoneNumber &&
+                formik.touched.phoneNumber && <p>{formik.errors.phoneNumber}</p>
+              }
             />
 
             <TextField
@@ -213,6 +208,10 @@ const AddUser = ({ onClose }) => {
               className={classes.textfieldStyle}
               onChange={formik.handleChange}
               value={formik.values.dob}
+              helperText={
+                formik.errors.dob &&
+                formik.touched.dob && <p>{formik.errors.dob}</p>
+              }
             />
 
             <TextField
@@ -226,7 +225,12 @@ const AddUser = ({ onClose }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.username}
+              helperText={
+                formik.errors.username &&
+                formik.touched.username && <p>{formik.errors.username}</p>
+              }
             />
+
             <div className={classes.radioStyle}>
               <FormLabel component="legend">Role</FormLabel>
               <RadioGroup
