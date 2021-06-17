@@ -1,4 +1,3 @@
-import { withStyles } from '@material-ui/core/styles';
 import {
   Button,
   Chip,
@@ -6,31 +5,14 @@ import {
   LinearProgress,
   IconButton,
   TextField,
-  Typography,
   makeStyles,
 } from '@material-ui/core';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
-import CloseIcon from '@material-ui/icons/Close';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Add } from '@material-ui/icons';
 import { addCategory } from '../../actions/category-actions';
-
-const styles = (theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(2),
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
-});
+import { DialogActions, DialogTitle, DialogContent } from '../general/dialog';
 
 const useStyles = makeStyles((theme) => ({
   textfieldStyle: {
@@ -54,35 +36,6 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '120px',
   },
 }));
-
-const DialogTitle = withStyles(styles)((props) => {
-  const { children, classes, onClose, ...other } = props;
-  return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
-      {onClose ? (
-        <IconButton className={classes.closeButton} onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
-  );
-});
-
-const DialogContent = withStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2),
-  },
-}))(MuiDialogContent);
-
-const DialogActions = withStyles((theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1),
-    justifyContent: 'center',
-  },
-}))(MuiDialogActions);
 
 const AddCategory = ({ onClose }) => {
   const [features, setFeatures] = useState([]);

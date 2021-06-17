@@ -119,6 +119,7 @@ const ManageUsers = () => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState({});
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
+  const usernames = usersData.map((user) => user.username);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -278,7 +279,10 @@ const ManageUsers = () => {
           </Fab>
         </div>
         <Dialog open={isAddUserOpen} onClose={() => setIsAddUserOpen(false)}>
-          <AddUser onClose={() => setIsAddUserOpen(false)} />
+          <AddUser
+            onClose={() => setIsAddUserOpen(false)}
+            users={() => usernames}
+          />
         </Dialog>
         <SnackBar />
       </div>

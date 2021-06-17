@@ -1,17 +1,10 @@
-import { withStyles } from '@material-ui/core/styles';
 import {
   Button,
   Grid,
-  IconButton,
   TextField,
-  Typography,
   makeStyles,
   LinearProgress,
 } from '@material-ui/core';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
-import CloseIcon from '@material-ui/icons/Close';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import PropTypes from 'prop-types';
@@ -20,21 +13,9 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
-import Yup from 'yup';
+import * as Yup from 'yup';
 import { signUp } from '../../actions/auth-actions';
-
-const styles = (theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(2),
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
-});
+import { DialogActions, DialogTitle, DialogContent } from '../general/dialog';
 
 const useStyles = makeStyles((theme) => ({
   textfieldStyle: {
@@ -57,30 +38,7 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     justifyContent: 'center',
   },
-  chipStyle: {
-    margin: '5px',
-    maxWidth: '120px',
-  },
-}));
-
-const DialogTitle = withStyles(styles)((props) => {
-  const { children, classes, onClose, ...other } = props;
-  return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
-      {onClose ? (
-        <IconButton className={classes.closeButton} onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
-  );
-});
-
-const DialogContent = withStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2),
+  dialogStyle: {
     [theme.breakpoints.down('xs')]: {
       width: theme.spacing(28),
     },
@@ -91,19 +49,16 @@ const DialogContent = withStyles((theme) => ({
       width: theme.spacing(50),
     },
   },
-}))(MuiDialogContent);
-
-const DialogActions = withStyles((theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1),
-    justifyContent: 'center',
+  errorStyle: {
+    color: '#d41a1a',
+    fontSize: '12px',
+    margin: '-5px',
   },
-}))(MuiDialogActions);
+}));
 
-const AddUser = ({ onClose }) => {
+const AddUser = ({ users, onClose }) => {
   const { storeId, signingUp } = useSelector((state) => state.auth);
-
+  const usernames = users();
   const classes = useStyles();
   const dispatch = useDispatch();
   const phoneRegExp =
@@ -129,7 +84,9 @@ const AddUser = ({ onClose }) => {
         .matches(phoneRegExp, 'Phone number is not valid')
         .length(10, 'Phone number is not valid')
         .required('Required!'),
-      username: Yup.string().required('Required!'),
+      username: Yup.mixed()
+        .required('Required!')
+        .notOneOf(usernames, 'Username not available'),
       dob: Yup.date().required('Required!'),
     }),
     onSubmit: (values) => {
@@ -142,7 +99,7 @@ const AddUser = ({ onClose }) => {
       <form onSubmit={formik.handleSubmit}>
         {signingUp === true ? <LinearProgress /> : null}
         <DialogTitle onClose={() => onClose()}>Add User</DialogTitle>
-        <DialogContent dividers>
+        <DialogContent dividers className={classes.dialogStyle}>
           <Grid container direction="row" className={classes.inputGridStyle}>
             <TextField
               className={classes.textfieldStyle}
@@ -157,7 +114,11 @@ const AddUser = ({ onClose }) => {
               value={formik.values.firstName}
               helperText={
                 formik.errors.firstName &&
-                formik.touched.firstName && <p>{formik.errors.firstName}</p>
+                formik.touched.firstName && (
+                  <p className={classes.errorStyle}>
+                    {formik.errors.firstName}
+                  </p>
+                )
               }
             />
 
@@ -174,7 +135,9 @@ const AddUser = ({ onClose }) => {
               value={formik.values.lastName}
               helperText={
                 formik.errors.lastName &&
-                formik.touched.lastName && <p>{formik.errors.lastName}</p>
+                formik.touched.lastName && (
+                  <p className={classes.errorStyle}>{formik.errors.lastName}</p>
+                )
               }
             />
 
@@ -191,7 +154,11 @@ const AddUser = ({ onClose }) => {
               value={formik.values.phoneNumber}
               helperText={
                 formik.errors.phoneNumber &&
-                formik.touched.phoneNumber && <p>{formik.errors.phoneNumber}</p>
+                formik.touched.phoneNumber && (
+                  <p className={classes.errorStyle}>
+                    {formik.errors.phoneNumber}
+                  </p>
+                )
               }
             />
 
@@ -210,7 +177,9 @@ const AddUser = ({ onClose }) => {
               value={formik.values.dob}
               helperText={
                 formik.errors.dob &&
-                formik.touched.dob && <p>{formik.errors.dob}</p>
+                formik.touched.dob && (
+                  <p className={classes.errorStyle}>{formik.errors.dob}</p>
+                )
               }
             />
 
@@ -227,7 +196,9 @@ const AddUser = ({ onClose }) => {
               value={formik.values.username}
               helperText={
                 formik.errors.username &&
-                formik.touched.username && <p>{formik.errors.username}</p>
+                formik.touched.username && (
+                  <p className={classes.errorStyle}>{formik.errors.username}</p>
+                )
               }
             />
 
@@ -269,6 +240,7 @@ const AddUser = ({ onClose }) => {
 
 AddUser.propTypes = {
   onClose: PropTypes.func.isRequired,
+  users: PropTypes.func.isRequired,
 };
 
 export default AddUser;
