@@ -44,6 +44,7 @@ const SideNav = () => {
   const dispatch = useDispatch();
 
   const { isDrawerOpen } = useSelector((state) => state.general);
+  const { currentUser } = useSelector((state) => state.auth);
 
   return (
     <div>
@@ -54,7 +55,7 @@ const SideNav = () => {
           onBackdropClick={() => dispatch(toggleDrawer())}
         >
           <ListItem>
-            <ListItemText primary="Hi, Vishnu Vardhan" />
+            <ListItemText>Hi, {currentUser}</ListItemText>
           </ListItem>
           <Divider />
           <SideNavItems />

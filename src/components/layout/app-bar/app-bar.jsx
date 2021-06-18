@@ -10,7 +10,7 @@ import {
 import { deepOrange } from '@material-ui/core/colors';
 import { Menu as MenuIcon } from '@material-ui/icons';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AvatarMenuItems from './avatar-menu-items';
 import { toggleDrawer } from '../../../actions/general-actions';
 
@@ -34,6 +34,7 @@ const AppBar = () => {
   const dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const { currentUser } = useSelector((state) => state.auth);
 
   return (
     <div>
@@ -50,7 +51,9 @@ const AppBar = () => {
             Enterprise Name
           </Typography>
           <IconButton onClick={(event) => setAnchorEl(event.currentTarget)}>
-            <Avatar className={classes.avatarStyle}>S</Avatar>
+            <Avatar className={classes.avatarStyle}>
+              {currentUser[0].toUpperCase()}
+            </Avatar>
           </IconButton>
           <Menu
             anchorEl={anchorEl}

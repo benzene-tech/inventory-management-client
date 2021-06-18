@@ -23,6 +23,7 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Dialog from '@material-ui/core/Dialog';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import SnackBar from '../general/snackbar';
 import addUsers from '../../static/addUsers.svg';
 import { deleteUser } from '../../actions/users-actions';
@@ -119,6 +120,7 @@ const ManageUsers = () => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState({});
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
+  const [selectionModel, setSelectionModel] = useState([]);
   const usernames = usersData.map((user) => user.username);
   const dispatch = useDispatch();
 
@@ -189,9 +191,20 @@ const ManageUsers = () => {
     userType: data.userType,
   }));
 
+  const handleSelection = (newSelection) => {
+    if (newSelection) {
+      setSelectionModel(newSelection.selectionModel);
+    } else {
+      setSelectionModel(null);
+    }
+  };
+  const handleClickAway = () => {
+    handleSelection(null);
+  };
+
   function CustomToolbar() {
     return (
-      <GridToolbarContainer>
+      <GridToolbarContainer style={{ justifyContent: 'space-between' }}>
         <GridToolbarExport />
         {isDelete ? (
           <div>
@@ -252,16 +265,20 @@ const ManageUsers = () => {
           <Grid container className={classes.gridStyle}>
             {usersData.length ? (
               <div className={classes.tableStyle}>
-                <DataGrid
-                  rows={rows}
-                  columns={columns}
-                  pageSize={5}
-                  disableColumnMenu
-                  components={{
-                    Toolbar: CustomToolbar,
-                  }}
-                  onRowClick={(rowData) => handleRowClick(rowData)}
-                />
+                <ClickAwayListener onClickAway={handleClickAway}>
+                  <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    pageSize={5}
+                    disableColumnMenu
+                    onSelectionModelChange={handleSelection}
+                    selectionModel={selectionModel}
+                    components={{
+                      Toolbar: CustomToolbar,
+                    }}
+                    onRowClick={(rowData) => handleRowClick(rowData)}
+                  />
+                </ClickAwayListener>
               </div>
             ) : (
               <img src={addUsers} alt="Add Users" />
