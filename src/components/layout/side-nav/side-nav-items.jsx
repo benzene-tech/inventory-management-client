@@ -6,8 +6,13 @@ import sideNavItems from '../../../constants/side-nav-items';
 
 const SideNavItems = () => {
   const { drawerContext } = useSelector((state) => state.general);
+  const { userType } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
+  if (userType !== 'super-user') {
+    const index = 4;
+    sideNavItems.splice(index, 1);
+  }
 
   return (
     <div>

@@ -18,9 +18,6 @@ export const signIn = (credentials) => async (dispatch) => {
 
     const { user } = res.data;
 
-    window.localStorage.setItem('storeId', user.storeId);
-    window.localStorage.setItem('userType', user.userType);
-
     dispatch({ type: SIGN_IN_SUCCESS, payload: user });
   } catch (err) {
     const { errors } = err.response.data;
