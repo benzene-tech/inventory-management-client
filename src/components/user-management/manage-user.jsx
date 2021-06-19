@@ -199,6 +199,7 @@ const ManageUsers = () => {
     }
   };
   const handleClickAway = () => {
+    setIsDelete(false);
     handleSelection(null);
   };
 

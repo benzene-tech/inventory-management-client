@@ -12,7 +12,12 @@ import {
 
 const initState = {
   currentUser: null,
-  storeId: null,
+  storeId: window.localStorage.getItem('storeId')
+    ? window.localStorage.getItem('storeId')
+    : null,
+  userType: window.localStorage.getItem('userType')
+    ? window.localStorage.getItem('userType')
+    : null,
   authToken: null,
   signingIn: false,
   signingUp: false,
@@ -36,6 +41,7 @@ const authReducer = (state = initState, action) => {
         ...state,
         currentUser: action.payload.username,
         storeId: action.payload.storeId,
+        userType: action.payload.userType,
         errors: null,
         signingIn: false,
       };
