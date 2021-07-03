@@ -22,11 +22,7 @@ import { addProduct } from '../../actions/product-actions';
 import { DialogActions, DialogTitle, DialogContent } from '../general/dialog';
 
 const useStyles = makeStyles((theme) => ({
-  textfieldStyle: {
-    width: '100%',
-    marginBottom: theme.spacing(2),
-  },
-  smallTextfieldStyle: {
+  smalltextfield: {
     width: '100px',
     margin: theme.spacing(0.5),
   },
@@ -138,7 +134,7 @@ const AddProduct = ({ onClose }) => {
             <TextField
               error={nameError !== ''}
               variant="outlined"
-              className={classes.textfieldStyle}
+              className="textfield"
               label="Name*"
               value={name}
               onChange={(e) => {
@@ -175,7 +171,7 @@ const AddProduct = ({ onClose }) => {
                 variant="outlined"
                 key={feature.name}
                 size="small"
-                className={classes.smallTextfieldStyle}
+                className={classes.smalltextfield}
                 label={feature.name}
                 value={feature.value}
                 onChange={(e) => {
@@ -196,7 +192,7 @@ const AddProduct = ({ onClose }) => {
           <Grid container direction="column">
             <TextField
               variant="outlined"
-              className={classes.textfieldStyle}
+              className="textfield"
               label="Image URL"
               value={imgUrl}
               onChange={(e) => {

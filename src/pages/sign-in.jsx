@@ -25,10 +25,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     marginTop: '30vh',
   },
-  textfieldStyle: {
-    width: '100%',
-    marginBottom: theme.spacing(2),
-  },
   linkStyle: {
     marginTop: theme.spacing(-1.5),
     marginBottom: theme.spacing(2),
@@ -80,7 +76,7 @@ const SignIn = () => {
               variant="outlined"
               value={formik.values.username}
               onChange={formik.handleChange}
-              className={classes.textfieldStyle}
+              className="textfield"
             />
           </Grid>
           <Grid container item xs={11} sm={6} md={4}>
@@ -104,7 +100,7 @@ const SignIn = () => {
                   </IconButton>
                 ),
               }}
-              className={classes.textfieldStyle}
+              className="textfield"
             />
           </Grid>
           <Grid item xs={11} sm={6} md={4} className={classes.linkStyle}>

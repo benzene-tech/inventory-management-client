@@ -35,10 +35,6 @@ const styles = (theme) => ({
 });
 
 const useStyles = makeStyles((theme) => ({
-  textfieldStyle: {
-    width: '100%',
-    marginBottom: theme.spacing(2),
-  },
   listStyle: {
     listStyle: 'none',
     [theme.breakpoints.down('xs')]: {
@@ -50,10 +46,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       width: theme.spacing(50),
     },
-  },
-  chipStyle: {
-    margin: '5px',
-    maxWidth: '120px',
   },
 }));
 
@@ -109,7 +101,7 @@ const ViewCategory = ({ category, onClose }) => {
             color="primary"
             disabled
             variant="outlined"
-            className={classes.textfieldStyle}
+            className="textfield"
             label="Name"
             value={name}
           />
@@ -119,7 +111,7 @@ const ViewCategory = ({ category, onClose }) => {
               variant="outlined"
               label="Features*"
               value={newFeature}
-              className={classes.textfieldStyle}
+              className="textfield"
               helperText={featureError}
               onChange={(e) => setNewFeature(e.target.value)}
               InputProps={{
@@ -164,7 +156,7 @@ const ViewCategory = ({ category, onClose }) => {
                 <Chip
                   variant="outlined"
                   key={_feature.name}
-                  className={classes.chipStyle}
+                  className="chip"
                   label={_feature.name}
                   onDelete={() => {
                     setFeatures(() =>
@@ -181,7 +173,7 @@ const ViewCategory = ({ category, onClose }) => {
                 <Chip
                   variant="outlined"
                   key={_feature.name}
-                  className={classes.chipStyle}
+                  className="chip"
                   label={_feature.name}
                   color="primary"
                 />

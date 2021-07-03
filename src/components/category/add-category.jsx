@@ -15,10 +15,6 @@ import { addCategory } from '../../actions/category-actions';
 import { DialogActions, DialogTitle, DialogContent } from '../general/dialog';
 
 const useStyles = makeStyles((theme) => ({
-  textfieldStyle: {
-    width: '100%',
-    marginBottom: theme.spacing(2),
-  },
   listStyle: {
     listStyle: 'none',
     [theme.breakpoints.down('xs')]: {
@@ -30,10 +26,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       width: theme.spacing(50),
     },
-  },
-  chipStyle: {
-    margin: '5px',
-    maxWidth: '120px',
   },
 }));
 
@@ -56,7 +48,7 @@ const AddCategory = ({ onClose }) => {
           <TextField
             error={nameError !== ''}
             variant="outlined"
-            className={classes.textfieldStyle}
+            className="textfield"
             label="Name*"
             value={name}
             onChange={(e) => {
@@ -69,7 +61,7 @@ const AddCategory = ({ onClose }) => {
             variant="outlined"
             label="Features*"
             value={newFeature}
-            className={classes.textfieldStyle}
+            className="textfield"
             helperText={featureError}
             onChange={(e) => setNewFeature(e.target.value)}
             InputProps={{
@@ -113,7 +105,7 @@ const AddCategory = ({ onClose }) => {
               <Chip
                 variant="outlined"
                 key={_feature.key}
-                className={classes.chipStyle}
+                className="chip"
                 label={_feature.value}
                 onDelete={() => {
                   setFeatures(() =>

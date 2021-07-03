@@ -36,11 +36,7 @@ const styles = (theme) => ({
 });
 
 const useStyles = makeStyles((theme) => ({
-  textfieldStyle: {
-    width: '100%',
-    marginBottom: theme.spacing(2),
-  },
-  smallTextfieldStyle: {
+  smalltextfield: {
     width: '100px',
     margin: theme.spacing(1),
   },
@@ -128,7 +124,7 @@ const ViewProduct = ({ product, onClose }) => {
                 key={feature.name}
                 size="small"
                 disabled={!isEditing}
-                className={classes.smallTextfieldStyle}
+                className={classes.smalltextfield}
                 label={feature.name}
                 value={feature.value}
                 onChange={(e) => {
@@ -148,7 +144,7 @@ const ViewProduct = ({ product, onClose }) => {
           {isEditing === true ? (
             <TextField
               variant="outlined"
-              className={classes.textfieldStyle}
+              className="textfield"
               label="Image URL"
               value={imgUrl}
               onChange={(e) => {
