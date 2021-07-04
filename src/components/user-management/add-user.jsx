@@ -3,6 +3,7 @@ import {
   Grid,
   TextField,
   makeStyles,
+  Typography,
   LinearProgress,
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
@@ -115,9 +116,9 @@ const AddUser = ({ users, onClose }) => {
               helperText={
                 formik.errors.firstName &&
                 formik.touched.firstName && (
-                  <p className={classes.errorStyle}>
+                  <Typography component="span" className={classes.errorStyle}>
                     {formik.errors.firstName}
-                  </p>
+                  </Typography>
                 )
               }
             />
@@ -136,7 +137,9 @@ const AddUser = ({ users, onClose }) => {
               helperText={
                 formik.errors.lastName &&
                 formik.touched.lastName && (
-                  <p className={classes.errorStyle}>{formik.errors.lastName}</p>
+                  <Typography component="span" className={classes.errorStyle}>
+                    {formik.errors.lastName}
+                  </Typography>
                 )
               }
             />
@@ -155,9 +158,9 @@ const AddUser = ({ users, onClose }) => {
               helperText={
                 formik.errors.phoneNumber &&
                 formik.touched.phoneNumber && (
-                  <p className={classes.errorStyle}>
+                  <Typography component="span" className={classes.errorStyle}>
                     {formik.errors.phoneNumber}
-                  </p>
+                  </Typography>
                 )
               }
             />
@@ -178,7 +181,9 @@ const AddUser = ({ users, onClose }) => {
               helperText={
                 formik.errors.dob &&
                 formik.touched.dob && (
-                  <p className={classes.errorStyle}>{formik.errors.dob}</p>
+                  <Typography component="span" className={classes.errorStyle}>
+                    {formik.errors.dob}
+                  </Typography>
                 )
               }
             />
@@ -197,7 +202,9 @@ const AddUser = ({ users, onClose }) => {
               helperText={
                 formik.errors.username &&
                 formik.touched.username && (
-                  <p className={classes.errorStyle}>{formik.errors.username}</p>
+                  <Typography component="span" className={classes.errorStyle}>
+                    {formik.errors.username}
+                  </Typography>
                 )
               }
             />

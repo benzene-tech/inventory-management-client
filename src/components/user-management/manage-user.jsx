@@ -1,4 +1,3 @@
-import { withStyles } from '@material-ui/core/styles';
 import {
   makeStyles,
   GridList,
@@ -6,8 +5,6 @@ import {
   Fab,
   Avatar,
   Button,
-  Typography,
-  IconButton,
 } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { Add } from '@material-ui/icons';
@@ -18,9 +15,6 @@ import {
   GridToolbarContainer,
   GridToolbarExport,
 } from '@material-ui/data-grid';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogActions from '@material-ui/core/DialogActions';
-import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Dialog from '@material-ui/core/Dialog';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
@@ -28,19 +22,7 @@ import SnackBar from '../general/snackbar';
 import addUsers from '../../static/addUsers.svg';
 import { deleteUser } from '../../actions/users-actions';
 import AddUser from './add-user';
-
-const styles = (theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(2),
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
-});
+import { DialogActions, DialogTitle } from '../general/dialog';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -87,29 +69,6 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(2),
   },
 }));
-
-const DialogTitle = withStyles(styles)((props) => {
-  const { children, classes, onClose, ...other } = props;
-  return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
-      {onClose ? (
-        <IconButton className={classes.closeButton} onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
-  );
-});
-
-const DialogActions = withStyles((theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1),
-    justifyContent: 'center',
-  },
-}))(MuiDialogActions);
 
 const ManageUsers = () => {
   const classes = useStyles();
