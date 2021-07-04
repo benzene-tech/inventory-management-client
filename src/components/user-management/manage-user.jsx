@@ -134,7 +134,7 @@ const ManageUsers = () => {
           storeId,
         },
       });
-      setUsersData(res.data);
+      setUsersData(res.data.filter((data) => data.userType !== 'super-user'));
     };
     fetchProducts();
   }, [successSnackbar]);
